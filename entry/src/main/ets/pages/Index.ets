@@ -1,27 +1,26 @@
+import {uiTermsStyle} from "../components/components"
+import {Header} from "../components/components"
+import {buttonStyle} from "../components/components"
+import {forgetPassword} from "../components/components"
+import {welcome} from "../components/components"
+@Styles
+//背部统一卡片样式
+function card() {
+  .margin({ left: 10, right: 10 })
+  .backgroundColor(Color.White)
+  .borderRadius(15)
+}
+
 @Entry
 @Component
 struct Register {
+  @State tellnumber:string='188****8888'
   build() {
     Column({ space: 10 }) {
       // 返回键位
-      this.Header()
-
+      Header()
       // 注册标题
-      Row() {
-        Text('欢迎注册')
-          .fontSize(30)
-          .fontWeight(FontWeight.Bold)
-          .margin({  top: 30,left: 10, right: 10 })
-
-      }
-      .width('100%')
-      // 注册说明
-      Row() {
-        Text('未注册的手机号将自动创建为账号')
-          .fontColor('#636e72')
-          .fontSize(14)
-          .margin({ left: 10, right: 10 })
-      }.width('100%')
+     welcome("欢迎注册","未注册的手机号将自自动创建账号")
 
       Column({ space: 10 }) {
         //导航
@@ -34,54 +33,28 @@ struct Register {
               }.width('100%')
 
               TextInput({ placeholder: '请输入用户名/邮箱/账号' })
-                .fontColor('#dcdce3')
                 .margin({ top: 10 })
+                .padding(10)
+
 
               Row() {
                 Text('密码：').fontSize(16).fontWeight(FontWeight.Bold)
               }.width('100%')
 
               TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
-                .fontColor('#dcdce3')
                 .margin({ top: 10 })
                 .padding(10)
                 .type(InputType.Password)
 
               // 手机号登录与忘记密码
-              Row() {
-                Text('手机号登录')
-                  .fontSize(15)
-                  .fontColor('#636e72')
-                Text('忘记密码')
-                  .fontSize(15)
-                  .fontColor('#636e72')
-              }.margin({ top: 20 }).width('100%').justifyContent(FlexAlign.SpaceAround)
-
+              forgetPassword()
               // 登录按钮
               Column() {
-                Button('登录')
-                  .borderRadius(10)
-                  .backgroundColor("#ecc4f4")
-                  .type(ButtonType.Normal)
-                  .fontSize(20)
-                  .width(320)
-                  .height(60)
+                buttonStyle("登录")
               }.margin({ top: 20 })
 
               // 服务条款与隐私政策
-              Row() {
-                Checkbox().selectedColor('#ecc4f4')
-                Text('已阅读并同意')
-                Text('《服务条款》')
-                  .fontColor('#4c74fc')
-                  //事件
-                  .onClick(() => {})
-                Text('和')
-                Text('《隐私权政策》')
-                  .fontColor('#4c74fc')
-                  //事件
-                  .onClick(() => {})
-              }.justifyContent(FlexAlign.SpaceAround)
+              uiTermsStyle()
             }
             .padding({bottom:200})
           }
@@ -90,18 +63,19 @@ struct Register {
           // 免密登录 Tab 内容
           TabContent() {
             // 内容
+            Column(){
+              Text(this.tellnumber)
+                .fontSize(40)
+              Column() {
+                buttonStyle("手机号一键登录")
+              }.margin({ top: 50 })
+              uiTermsStyle()
+            }.padding({bottom:200})
+
           }.tabBar('免密登录')
         }
       }
-      .margin({ left: 10, right: 10 })
-      .backgroundColor(Color.White)
-      .borderRadius(15)
-      .shadow({
-        radius: 6,
-        color: '#1F000000',
-        offsetX: 2,  // 阴影在 X 轴上向右偏移 2 像素
-        offsetY: 4   // 阴影在 Y 轴上向下偏移 4 像素
-      })
+     .card()
     }
     .width('100%')
     .height('100%')
@@ -109,10 +83,5 @@ struct Register {
 
   }
 
-  @Builder Header() {
-    Row() {
-      Image($r('app.media.ic_public_back')).width(30)
-      // 点击返回事件
-    }.width('100%')
-  }
+
 }
