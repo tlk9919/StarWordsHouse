@@ -85,3 +85,24 @@ export function welcome(welcome1:string,tip:string){
 }
 
 
+@Component
+export  struct  freePassLogin {
+  @State tellnumber:string='188****8888'
+  build() {
+    // 免密登录 Tab 内容
+    TabContent() {
+      // 内容
+      Column(){
+        Text(this.tellnumber)
+          .fontSize(40)
+        Column() {
+          buttonStyle("手机号一键登录")
+        }.margin({ top: 50 })
+        uiTermsStyle()
+      }.padding({bottom:200})
+
+    }.tabBar('免密登录')
+  }
+}
+
+

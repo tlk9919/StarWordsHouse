@@ -3,6 +3,7 @@ import {Header} from "../components/components"
 import {buttonStyle} from "../components/components"
 import {forgetPassword} from "../components/components"
 import {welcome} from "../components/components"
+import {freePassLogin} from "../components/components"
 @Styles
 //背部统一卡片样式
 function card() {
@@ -20,7 +21,7 @@ struct Register {
       // 返回键位
       Header()
       // 注册标题
-     welcome("欢迎注册","未注册的手机号将自自动创建账号")
+     welcome("欢迎注册","未注册的手机号将自动创建账号")
 
       Column({ space: 10 }) {
         //导航
@@ -61,18 +62,7 @@ struct Register {
           .tabBar('账号密码')
 
           // 免密登录 Tab 内容
-          TabContent() {
-            // 内容
-            Column(){
-              Text(this.tellnumber)
-                .fontSize(40)
-              Column() {
-                buttonStyle("手机号一键登录")
-              }.margin({ top: 50 })
-              uiTermsStyle()
-            }.padding({bottom:200})
-
-          }.tabBar('免密登录')
+          freePassLogin()
         }
       }
      .card()
