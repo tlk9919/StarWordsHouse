@@ -1,3 +1,5 @@
+import { router } from "@kit.ArkUI"
+
 @Styles
 //背部统一卡片样式
 function card(){
@@ -37,6 +39,9 @@ export  struct  uiTermsStyle {
   Row() {
     Image($r('app.media.ic_public_back')).width(30)
     // 点击返回事件
+      .onClick(()=>{
+        router.back()
+      })
   }.width('100%')
 }
 
@@ -62,6 +67,19 @@ export  struct forgetPassword  {
       Text('忘记密码')
         .fontSize(15)
         .fontColor('#636e72')
+        .onClick(()=>{
+          router.pushUrl(
+            {
+            url:'pages/RecoverPassword'
+          },
+            err=>{
+              if (err) {
+                console.log(`路由失败 errCode:${err.code} ,errMsg:${err.message}`)
+              }
+            }
+
+          )
+        })
     }.margin({ top: 20 }).width('100%').justifyContent(FlexAlign.SpaceAround)
   }
 }
