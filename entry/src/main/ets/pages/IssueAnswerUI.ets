@@ -13,7 +13,7 @@ class detail {
 //统一卡片样式
 @Styles
 function card() {
-  .position({left:65,top:200})
+  .margin({left:65,top:10})
   .width('80%')
   .padding(10)
   .backgroundColor(Color.White)
@@ -30,7 +30,6 @@ function card() {
 @Entry
 @Component
 struct issueAnswerUI {
-
   build() {
     Column() {
       //返回图标
@@ -59,7 +58,7 @@ struct issueAnswerUI {
 @Component
 struct content {
   //标记变量
-  @State selectedIndex: number = -1  // 表示没有选中的问题
+  @State selectedIndex: number = -1// 表示没有选中的问题
   //标记字体颜色
   @State color: string = '#4c94ec'
 
@@ -79,7 +78,7 @@ struct content {
       Image($r('app.media.avatar'))
         .width(60)
         .height(60)
-        .position({ x: 0, y: 170 })  // 定位到左上角
+        .position({ x: 0, y: -30 })  // 定位到左上角
 
       // 问题文本及内容
       Column({ space: 12 }) {
@@ -88,14 +87,14 @@ struct content {
         ForEach(
           //数组
           this.words,
-          (item: detail, index: number) => {
+          (item: detail, index:number) => {
             Row() {
               Text(item.title)
-                .fontSize(18)
-                .fontColor(this.selectedIndex === index ? '#949494' : this.color)
-                .onClick(() => {
-                  this.selectedIndex = index
-                })
+                .fontSize(19)
+                .fontColor(this.selectedIndex === index ? '#ff625d5d' : this.color)
+                .onClick(() =>
+                 this.selectedIndex=index
+                )
               Blank()
               Button() {
                 Image(item.clickImage)
@@ -104,11 +103,11 @@ struct content {
               }
               //点击事件
               .onClick(() => {
-                this.selectedIndex = index
+                this.selectedIndex=index
+
               })
             }
             .width('100%')
-            .justifyContent(FlexAlign.Start)
           }
         )
 
@@ -142,4 +141,5 @@ struct content {
     })
     .position({ x: 270, y: 0 })
   }
+
 }
