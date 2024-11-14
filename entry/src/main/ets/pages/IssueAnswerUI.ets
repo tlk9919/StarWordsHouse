@@ -43,6 +43,8 @@ struct issueAnswerUI {
         .position({ x: 15, y: 470 })
       //内容
       content()
+      //底部面板
+
       //问答输入框
       Blank()
       //提问
@@ -54,14 +56,18 @@ struct issueAnswerUI {
     .backgroundColor('#fccccc')
   }
 }
-
 @Component
 struct content {
-  //标记变量
-  @State selectedIndex: number = -1// 表示没有选中的问题
+  //底部具体问题弹出面板
+  @State isShow: boolean = false
+  //面板高度
+  @State sheetHeight: number = 800;
+  //更新字体颜色标记
+  @State selectedIndex:number=-1
+  // 用于保存当前选中的问题
+  @State selectedDetail: detail | null = null // 用于保存当前选中的问题
   //标记字体颜色
   @State color: string = '#4c94ec'
-
   private words: Array<detail> = [
     new detail('怎么改善月经不调', $r("app.media.detailClick")),
     new detail('怎样区分原发性痛经和继发性痛经', $r("app.media.detailClick")),
@@ -69,7 +75,7 @@ struct content {
     new detail('怎样缓解经期痛', $r("app.media.detailClick")),
     new detail('经期提前', $r("app.media.detailClick")),
     new detail('女生第一次来例假时间', $r("app.media.detailClick")),
-    new detail('月经回朝', $r("app.media.detailClick"))
+    new detail('月经回潮', $r("app.media.detailClick"))
   ]
 
   build() {
@@ -79,7 +85,6 @@ struct content {
         .width(60)
         .height(60)
         .position({ x: 0, y: -30 })  // 定位到左上角
-
       // 问题文本及内容
       Column({ space: 12 }) {
         Text('小星列出了一些常见问题，不知道能否解决星崽的疑问？')
@@ -87,14 +92,16 @@ struct content {
         ForEach(
           //数组
           this.words,
-          (item: detail, index:number) => {
+          (item: detail, index: number) => {
             Row() {
               Text(item.title)
                 .fontSize(19)
                 .fontColor(this.selectedIndex === index ? '#ff625d5d' : this.color)
-                .onClick(() =>
-                 this.selectedIndex=index
-                )
+                .onClick(() => {
+                  this.selectedIndex=index
+                  this.selectedDetail = item // 设置当前选择的问题
+                  this.isShow = true // 显示弹窗
+                })
               Blank()
               Button() {
                 Image(item.clickImage)
@@ -103,22 +110,30 @@ struct content {
               }
               //点击事件
               .onClick(() => {
-                this.selectedIndex=index
-
+                this.selectedDetail = item
+                this.isShow = true
               })
             }
             .width('100%')
           }
         )
-
       }.card()
+
+      // 具体信息弹窗
+      .bindSheet($$this.isShow, issueDetail(this.selectedDetail), {
+        height: this.sheetHeight,
+        backgroundColor: Color.White,
+        blurStyle: BlurStyle.Thick,
+        showClose: true,
+        title: { title: "详细信息", subtitle: this.selectedDetail?.title || "暂无标题" }
+      })
+
     }
 
   }
 }
 @Builder function submitIssue (){
-
-  Stack() {
+  Row() {
     TextInput({ placeholder: '向我提问吧' })
       .width('80%')
       .height(50)
@@ -126,7 +141,7 @@ struct content {
       .caretColor('#b44444') //光标颜色
       .borderWidth(2)
       .borderColor('#a43c58')
-      .position({ x: -30 })
+
     Button() {
       Image($r('app.media.send'))
         .width(50)
@@ -139,7 +154,26 @@ struct content {
     .onClick(() => {
 
     })
-    .position({ x: 270, y: 0 })
+
   }
 
+}
+
+
+
+
+@Builder function issueDetail(detail: detail | null) {
+Column() {
+    if (detail) {
+      Text(`问题: ${detail.title}`)
+        .fontSize(30)
+      Text('详细内容待补充') // 根据需要展示问题的更多细节
+        .fontSize(16)
+    } else {
+      Text('请选择一个问题查看详细信息')
+        .fontSize(30)
+    }
+  }
+  .width('100%')
+    .height('100%')
 }

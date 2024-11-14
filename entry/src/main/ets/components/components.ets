@@ -21,7 +21,7 @@ export  struct  uiTermsStyle {
         })
         .fontColor('#4c74fc')
       Text('和')
-      Text('《隐私权政策》')
+      Text('《隐私权政策》').fontSize(15)
         //事件
         .onClick(()=>{
 

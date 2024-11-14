@@ -1,9 +1,21 @@
+//目前所写的页面
+import { router } from '@kit.ArkUI'
+
+class PageUrl{
+  pageName:string
+  url:string
+
+  constructor(  pageName:string,url:string) {
+    this.pageName=pageName
+    this.url=url
+  }
+}
 //统一卡片样式
 @Styles
 function card() {
   .width('80%')
   .padding(10)
-  .backgroundColor(Color.White)
+  .backgroundColor(Color.Pink)
   .borderRadius({topLeft: 0, topRight: 15, bottomRight: 15, bottomLeft: 15})
   .shadow({
     radius: 6,
@@ -16,15 +28,43 @@ function card() {
 @Entry
 @Component
 struct  indexHome {
+
   //标记
   @State currentIndex: number = 0
+
+  //创建一个数组存放目前写的目录
+private currentPage:Array<PageUrl>=[
+  new PageUrl('问答界面','pages/IssueAnswerUI'),
+  new PageUrl('登录注册界面', 'pages/RegisterLogin'),
+  new PageUrl('忘记密码界面', 'pages/RecoverPassword')
+]
 
   build() {
     //底部导航栏
     Tabs({ barPosition: BarPosition.End }) {
       TabContent() {
-        Text('关心')
-      }.tabBar(this.TabTitle('关心', $r('app.media.tab01_care'), $r('app.media.tab01_care_active'),0))
+        Column(){
+          Text('current Pages:')
+            .fontSize(50)
+            .fontWeight(FontWeight.Bold)
+            .height(80)
+          List(){
+            ForEach(
+              //数组
+              this.currentPage,
+              (itemPage:PageUrl,index)=>{
+                ListItem(){
+                  //
+                  currentPage(itemPage,index+1)
+                }
+              }
+            )
+          }
+          .layoutWeight(1)
+          .alignListItem(ListItemAlign.Center)//ListItemAlign 是用于列表项对齐的属性
+
+        }
+        }.tabBar(this.TabTitle('关心', $r('app.media.tab01_care'), $r('app.media.tab01_care_active'),0))
 
       TabContent() {
         Text('问答')
@@ -58,4 +98,36 @@ struct  indexHome {
         .fontSize(14)
     }
   }
+}
+
+@Builder
+function  currentPage(r:PageUrl ,i:number){
+Row(){
+  Text(i+'.')
+    .fontSize(20)
+    .fontColor(Color.White)
+  Blank()
+  Text(r.pageName)
+    .fontSize(20)
+    .fontColor(Color.White)
+}
+.margin(10)
+.card()
+.onClick(()=>{
+  //router跳转
+  router.pushUrl(
+    {
+      url:r.url,
+      params:{id:i}
+    },
+    //跳转模式
+    router.RouterMode.Single,
+    //失败的回调
+    err=>{
+      if (err) {
+        console.log(`路由失败 errCode:${err.code} ,errMsg:${err.message}`)
+      }
+    }
+  )
+})
 }
