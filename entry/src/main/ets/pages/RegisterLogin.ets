@@ -14,6 +14,7 @@ function card() {
 //导航栏及其内容
 @Component
 struct  tab {
+  @State tellnumber:string='188****8888'
   build() {
     Column({ space: 10 }) {
       //导航
@@ -26,8 +27,8 @@ struct  tab {
             }.width('100%')
 
             TextInput({ placeholder: '请输入用户名/邮箱/账号' })
-              .margin({ top: 10 })
-              .padding(10)
+              .margin(20)
+              .padding(20)
 
 
             Row() {
@@ -35,8 +36,8 @@ struct  tab {
             }.width('100%')
 
             TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
-              .margin({ top: 10 })
-              .padding(10)
+              .margin(20)
+              .padding(20)
               .type(InputType.Password)
 
             // 手机号登录与忘记密码
@@ -44,7 +45,7 @@ struct  tab {
             // 登录按钮
             Column() {
               buttonStyle("登录")
-            }.margin({ top: 20 })
+            }       .margin(20)
 
             // 服务条款与隐私政策
             uiTermsStyle()
@@ -53,8 +54,20 @@ struct  tab {
         }
         .tabBar('账号密码')
 
-        // 免密登录 Tab 内容
-        freePassLogin()
+        // 免密登录
+        // freePassLogin()//真机上无法调用
+        TabContent() {
+          // 内容
+          Column(){
+            Text(this.tellnumber)
+              .fontSize(40)
+            Column() {
+              buttonStyle("手机号一键登录")
+            }.margin({ top: 40 })
+            uiTermsStyle()
+          }.padding({bottom:300})
+
+        }.tabBar('免密登录')
       }
     }
     .card()
@@ -64,7 +77,7 @@ struct  tab {
 @Entry
 @Component
 struct Register {
-  @State tellnumber:string='188****8888'
+
   build() {
     Column({ space: 10 }) {
       // 返回键位

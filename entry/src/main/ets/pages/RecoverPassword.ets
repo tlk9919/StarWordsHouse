@@ -15,6 +15,7 @@ function card() {
 @Entry
 @Component
 struct findPassword {
+  @State tellnumber:string='188****8888'
 
   @State seconds: number = 0;  // 初始化
 
@@ -32,8 +33,9 @@ struct findPassword {
               }.width('100%')
 
               TextInput({ placeholder: "请输入手机号" })
-                .margin({ top: 10 })
-                .padding(10);
+                .margin(20)
+                .padding(20)
+                .type(InputType.Number);
 
               Row() {
                 Text('验证码：').fontSize(16).fontWeight(FontWeight.Bold)
@@ -43,8 +45,10 @@ struct findPassword {
                 // 堆叠布局，验证码输入框和按钮
                 Stack() {
                   TextInput({ placeholder: "请输入接收到的验证码" })
-                    .margin({ top: 10 })
-                    .padding(10);
+
+                    .margin(20)
+                    .padding(20)
+                    .type(InputType.Number);
 
                   Button() {
                     Text(this.seconds > 0 ? `${this.seconds}秒|后重新获取` : '获取验证码')
@@ -52,9 +56,9 @@ struct findPassword {
                       .fontSize(16);
                   }
                   .type(ButtonType.Normal)
-                  .fontColor('#72767a')
-                  .backgroundColor(Color.White)
-                  .position({ x: 208, y: 22 }) // 调整按钮位置
+                  // .fontColor('#72767a')
+                  .backgroundColor('#f4f4f4')
+                  .position({ x: 220,y:40 }) // 调整按钮位置
                   .onClick(() => this.startCountdown());
                 }
               }
@@ -64,14 +68,14 @@ struct findPassword {
               }.width('100%')
 
               TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
-                .margin({ top: 10 })
-                .padding(10)
+                .margin(20)
+                .padding(20)
                 .type(InputType.Password);
 
 
               Column() {
                 buttonStyle("确定")
-              }.margin({ top: 20 });
+              }.margin(20);
 
               // 服务条款与隐私政策
               uiTermsStyle();
@@ -80,13 +84,25 @@ struct findPassword {
           }.tabBar('账号登录')
 
           // 免密登录
-          freePassLogin()
+          // freePassLogin()//真机上无法调用
+          TabContent() {
+            // 内容
+            Column(){
+              Text(this.tellnumber)
+                .fontSize(40)
+              Column() {
+                buttonStyle("手机号一键登录")
+              }.margin({ top: 40 })
+              uiTermsStyle()
+            }.padding({bottom:300})
+
+          }.tabBar('免密登录')
         }
         .card()
       }
     }
     .width('100%')
-    .height('100%')
+
     .backgroundColor("#ecc4f4")
   }
 
