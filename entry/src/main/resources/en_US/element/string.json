@@ -9,8 +9,8 @@
       "value": "description"
     },
     {
-      "name": "EntryAbility_label",
-      "value": "label"
+      "name": "app_name",
+      "value": "StarWordsHut"
     }
   ]
 }

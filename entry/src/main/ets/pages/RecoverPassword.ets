@@ -84,19 +84,8 @@ struct findPassword {
           }.tabBar('账号登录')
 
           // 免密登录
-          // freePassLogin()//真机上无法调用
-          TabContent() {
-            // 内容
-            Column(){
-              Text(this.tellnumber)
-                .fontSize(40)
-              Column() {
-                buttonStyle("手机号一键登录")
-              }.margin({ top: 40 })
-              uiTermsStyle()
-            }.padding({bottom:300})
+          freePassLogin()//真机上无法调用
 
-          }.tabBar('免密登录')
         }
         .card()
       }

@@ -9,8 +9,24 @@
       "value": "description"
     },
     {
-      "name": "EntryAbility_label",
+      "name": "app_name",
       "value": "星语小屋"
+    },
+    {
+      "name": "user_privacy_title",
+      "value": "欢迎使用星语小屋"
+    },
+    {
+      "name": "user_privacy_content",
+      "value": "感谢您信任并使用星语小屋!我们将通过《用户协议》和《星语小屋隐私政策》帮助您了解我们收集、使用、存储和共享个人信息的情况，特别是我们所采集的个人信息类型与用途的对应关系。此外，您还能了解到您所享有的相关权利及实现途径。如您同意，请点击下方按钮开始接受我们的服务"
+    },
+    {
+      "name": "agree_label",
+      "value": "同意"
+    },
+    {
+      "name": "refuse_label",
+      "value": "不同意"
     }
   ]
 }

@@ -30,6 +30,8 @@ function card() {
 @Entry
 @Component
 struct issueAnswerUI {
+  //详细面板标记
+  @State isShowPanel:boolean=false
   build() {
     Column() {
       //返回图标
@@ -37,14 +39,11 @@ struct issueAnswerUI {
       //云
       Image($r('app.media.cloud'))
         .height(160)
-      //兔子
-      Image($r('app.media.rabbit'))
-        .height('160')
-        .position({ x: 15, y: 470 })
+
       //内容
       content()
       //底部面板
-
+// Panel(this.isShowPanel)
       //问答输入框
       Blank()
       //提问
@@ -150,29 +149,39 @@ struct content {
 }
 
 @Builder function submitIssue() {
-  Row() {
-    TextInput({ placeholder: '向我提问吧' })
-      .width('80%')
-      .height(50)
-      .margin({ bottom: 15 })
-      .caretColor('#b44444') //光标颜色
-      .borderWidth(2)
-      .borderColor('#a43c58')
+  Stack(){
+    //兔子
 
-    Button() {
-      Image($r('app.media.send'))
-        .width(50)
+      Image($r('app.media.rabbit'))
+        .height('160')
+        .position({x:0,y:-150})
+
+    Row() {
+
+      TextInput({ placeholder: '向我提问吧' })
+        .width('80%')
         .height(50)
-        .borderRadius(25)
-        .backgroundColor('#e48494')
-        .padding(8)
+        .margin({ bottom: 15 })
+        .caretColor('#b44444') //光标颜色
+        .borderWidth(2)
+        .borderColor('#a43c58')
+
+      Button() {
+        Image($r('app.media.send'))
+          .width(50)
+          .height(50)
+          .borderRadius(25)
+          .backgroundColor('#e48494')
+          .padding(8)
+      }
+      //事件
+      .onClick(() => {
+
+      })
+
     }
-    //事件
-    .onClick(() => {
-
-    })
-
   }
+
 
 }
 

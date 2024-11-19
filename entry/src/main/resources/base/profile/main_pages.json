@@ -3,6 +3,7 @@
     "pages/Index",
     "pages/RecoverPassword",
     "pages/IssueAnswerUI",
-    "pages/RegisterLogin"
+    "pages/RegisterLogin",
+    "pages/WelcomePage"
   ]
 }
