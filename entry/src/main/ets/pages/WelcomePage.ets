@@ -1,10 +1,29 @@
 import {PrivacyPolicyDialog} from '../view/welcome/PrivacyPolicyDialog'
+import { common } from '@kit.AbilityKit'
+
 @Entry
 @Component
 struct WelcomePage {
-controller:CustomDialogController=new CustomDialogController({
-  builder:PrivacyPolicyDialog()
-})
+  //获取实例信息
+  context=getContext(this) as common.UIAbilityContext
+  //声明弹窗
+  controller: CustomDialogController = new CustomDialogController({
+    builder: PrivacyPolicyDialog({
+        confirm:():void=>this.onConfirm()
+    })
+
+  })
+
+  onConfirm(){
+  //保存首选项
+
+
+    //跳转首页
+  }
+  exitApp(){
+  //退出
+    this.context.terminateSelf()
+  }
 
   aboutToAppear(): void{
   this.controller.open()
@@ -14,8 +33,8 @@ controller:CustomDialogController=new CustomDialogController({
 
         Column(){
           //图片
-          Image($r("app.media.welcome01")).width(260)
-          Image($r('app.media.welcome02')).width(260)
+          Image($r("app.media.welcome01")).width(260).interpolation(ImageInterpolation.High)
+          Image($r('app.media.welcome02')).width(260).interpolation(ImageInterpolation.High)
         }
         .layoutWeight(1)
 

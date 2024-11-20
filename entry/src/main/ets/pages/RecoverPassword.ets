@@ -1,100 +1,105 @@
-import { uiTermsStyle } from "../components/components";
-import { Header } from "../components/components";
-import { buttonStyle } from "../components/components";
+import { buttonStyle, Header, uiTermsStyle } from '../components/components';
 import { welcome } from "../components/components";
-import { freePassLogin } from "../components/components";
-
 @Styles
-// 背部统一卡片样式
+//背部统一卡片样式
 function card() {
-  .margin({ left: 10, right: 10 })
-  .backgroundColor(Color.White)
+  .width("95%")
+  .height("75%")
   .borderRadius(15)
+  .backgroundColor(Color.White)
+  .shadow({
+    radius:10,
+    color:'#ececec',
+    offsetX:5,
+    offsetY:5
+  })
 }
-
 @Entry
 @Component
-struct findPassword {
+struct ForgetPassword {
+
   @State tellnumber:string='188****8888'
-
   @State seconds: number = 0;  // 初始化
-
   build() {
-    Column({ space: 10 }) {
+    Column({ space: 10 }){
       Header();
       welcome("找回密码", "请输入新密码并验证手机号");
-      Column({ space: 10 }) {
-        Tabs() {
-          TabContent() {
-            // 内容部分
-            Column({ space: 15 }) {
-              Row() {
-                Text('手机号：').fontSize(16).fontWeight(FontWeight.Bold)
-              }.width('100%')
-
+      //登录详细框
+      Column(){
+        Tabs(){
+          TabContent(){
+            //具体内容
+            Column({space:30}){
+              Row(){
+                Text('手机号：')
+                  .fontSize(16).fontWeight(FontWeight.Bold)
+              }
+              .width('95%')
+              .justifyContent(FlexAlign.Start)
               TextInput({ placeholder: "请输入手机号" })
-                .margin(20)
                 .padding(20)
-                .type(InputType.Number);
-
-              Row() {
-                Text('验证码：').fontSize(16).fontWeight(FontWeight.Bold)
-              }.width('100%')
-
-              Row() {
-                // 堆叠布局，验证码输入框和按钮
-                Stack() {
-                  TextInput({ placeholder: "请输入接收到的验证码" })
-
-                    .margin(20)
-                    .padding(20)
-                    .type(InputType.Number);
-
-                  Button() {
-                    Text(this.seconds > 0 ? `${this.seconds}秒|后重新获取` : '获取验证码')
-                      .fontColor(this.seconds > 0 ? "#4c74fc":"#121212")
-                      .fontSize(16);
-                  }
-                  .type(ButtonType.Normal)
-                  // .fontColor('#72767a')
-                  .backgroundColor('#f4f4f4')
-                  .position({ x: 220,y:40 }) // 调整按钮位置
-                  .onClick(() => this.startCountdown());
+                .type(InputType.Number)
+                .caretColor('#ecc4f4') //光标颜色
+              Row(){
+                Text('密码：').fontSize(16)
+                  .fontWeight(FontWeight.Bold)
+              }
+              .width('95%')
+              .justifyContent(FlexAlign.Start)
+              TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
+                .padding(20)
+                .type(InputType.Password)
+                .caretColor('#ecc4f4') //光标颜色
+              Row(){
+                Text('验证码：')
+                  .fontSize(16).fontWeight(FontWeight.Bold)
+              }
+              .width('95%')
+              .justifyContent(FlexAlign.Start)
+              //堆叠布局验证码和输入框
+              Stack(){
+                TextInput({ placeholder: "请输入接收到的验证码" })
+                  .padding(20)
+                  .type(InputType.Number);
+                Button() {
+                  Text(this.seconds > 0 ? `${this.seconds}秒|后重新获取` : '获取验证码')
+                    .fontColor(this.seconds > 0 ? "#4c74fc":"#121212")
+                    .fontSize(16);
                 }
+                .type(ButtonType.Normal)
+                .backgroundColor('rgba(0, 0, 0, 0)')//透明颜色
+                .margin({left:200})
+                .onClick(() => this.startCountdown());
               }
 
-              Row() {
-                Text('密码：').fontSize(16).fontWeight(FontWeight.Bold)
-              }.width('100%')
-
-              TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
-                .margin(20)
-                .padding(20)
-                .type(InputType.Password);
-
-
-              Column() {
-                buttonStyle("确定")
-              }.margin(20);
-
+              //确定按钮
+              buttonStyle("确定")
               // 服务条款与隐私政策
               uiTermsStyle();
             }
-            .padding({ bottom: 200 })
           }.tabBar('账号登录')
-
           // 免密登录
-          freePassLogin()//真机上无法调用
+          // freePassLogin()//真机上无法调用
+          TabContent() {
+            // 内容
+            Column(){
+              Text(this.tellnumber)
+                .fontSize(40)
+              Column() {
+                buttonStyle("手机号一键登录")
+              }.margin({ top: 40 })
+              uiTermsStyle()
+            }
 
+          }.tabBar('免密登录')
         }
-        .card()
       }
+      .card()
     }
-    .width('100%')
-
     .backgroundColor("#ecc4f4")
+    .width('100%')
+    .height('100%')
   }
-
   // 获取验证码按钮点击事件
   startCountdown() {
     if (this.seconds === 0) {

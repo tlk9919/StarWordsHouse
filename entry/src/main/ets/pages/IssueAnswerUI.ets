@@ -37,14 +37,21 @@ struct issueAnswerUI {
       //返回图标
       Header()
       //云
-      Image($r('app.media.cloud'))
-        .height(160)
+     Column(){
+       Image($r('app.media.cloud'))
+         .height(160)
 
-      //内容
-      content()
+       //内容
+       content()
+     }
+     .layoutWeight(1)
       //底部面板
-// Panel(this.isShowPanel)
+      // Panel(this.isShowPanel)
       //问答输入框
+      Image($r('app.media.rabbit'))
+        .height('160')
+        .margin({right:120})
+
       Blank()
       //提问
       submitIssue()
@@ -135,7 +142,7 @@ struct content {
           this.showAll = !this.showAll
         })
       }.card()
-    }
+    }.width('100%')
 
     // 弹出详细信息
     .bindSheet($$this.isShow, issueDetail(this.selectedDetail), {
@@ -149,12 +156,9 @@ struct content {
 }
 
 @Builder function submitIssue() {
-  Stack(){
+  Column(){
     //兔子
 
-      Image($r('app.media.rabbit'))
-        .height('160')
-        .position({x:0,y:-150})
 
     Row() {
 

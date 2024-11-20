@@ -36,7 +36,9 @@ struct  indexHome {
 private currentPage:Array<PageUrl>=[
   new PageUrl('问答界面','pages/IssueAnswerUI'),
   new PageUrl('登录注册界面', 'pages/RegisterLogin'),
-  new PageUrl('忘记密码界面', 'pages/RecoverPassword')
+  new PageUrl('忘记密码界面', 'pages/RecoverPassword'),
+  new PageUrl('欢迎界面', 'pages/WelcomePage'),
+
 ]
 
   build() {
