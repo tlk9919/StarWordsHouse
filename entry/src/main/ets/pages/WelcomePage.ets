@@ -1,6 +1,10 @@
 import {PrivacyPolicyDialog} from '../view/welcome/PrivacyPolicyDialog'
 import { common } from '@kit.AbilityKit'
+import PreferencesUtils from '../components/utils/PreferencesUtils'
+import { router } from '@kit.ArkUI'
 
+
+const PRE_KEY='PrivacyKey'
 @Entry
 @Component
 struct WelcomePage {
@@ -9,24 +13,52 @@ struct WelcomePage {
   //声明弹窗
   controller: CustomDialogController = new CustomDialogController({
     builder: PrivacyPolicyDialog({
-        confirm:():void=>this.onConfirm()
+        confirm:():void=>this.onConfirm(),
+        cancel:():void=>this.exitApp(),
     })
 
   })
 
   onConfirm(){
   //保存首选项
-
-
+PreferencesUtils.putPreferenceValue("myPreference",PRE_KEY,true)
     //跳转首页
+    this.jumpToIndex()
   }
   exitApp(){
   //退出
     this.context.terminateSelf()
   }
 
-  aboutToAppear(): void{
-  this.controller.open()
+  async aboutToAppear() {
+    // 加载首选项
+    let isAgree = await PreferencesUtils.getPreferenceValue("myPreference", PRE_KEY, false);
+
+    // 判断
+    if (isAgree) {
+      this.jumpToIndex();
+    } else {
+      this.controller.open();
+    }
+  }
+
+  jumpToIndex(){
+    setTimeout(()=>{
+      router.replaceUrl(
+        {
+          url:'pages/Index'
+        },
+        //跳转模式
+        router.RouterMode.Single,
+        //失败的回调
+        err=>{
+          if (err) {
+            console.log(`路由失败 errCode:${err.code} ,errMsg:${err.message}`)
+          }
+        }
+      )
+    },1000)
+
   }
   build() {
       Column() {

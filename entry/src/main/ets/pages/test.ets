@@ -1,120 +1,73 @@
-import { buttonStyle, Header, uiTermsStyle } from '../components/components';
-import { welcome } from "../components/components";
-@Styles
-//背部统一卡片样式
-function card() {
-  .width("95%")
-  .height("75%")
-  .borderRadius(15)
-  .backgroundColor(Color.White)
-  .shadow({
-    radius:10,
-    color:'#ececec',
-    offsetX:5,
-    offsetY:5
-  })
-}
-@Entry
-@Component
-struct LayoutWeightExample {
+import preferences from '@ohos.data.preferences';
+import { Context } from '@kit.AbilityKit';
 
-  @State tellnumber:string='188****8888'
-  @State seconds: number = 0;  // 初始化
-  build() {
-    Column({ space: 10 }){
-      Header();
-      welcome("找回密码", "请输入新密码并验证手机号");
-      //登录详细框
-      Column(){
-        Tabs(){
-          TabContent(){
-            //具体内容
-            Column({space:18}){
-              Row(){
-                Text('手机号：')
-                  .fontSize(16).fontWeight(FontWeight.Bold)
-              }
-              .width('95%')
-              .justifyContent(FlexAlign.Start)
-              TextInput({ placeholder: "请输入手机号" })
-                .padding(20)
-                .type(InputType.Number)
-                .caretColor('#ecc4f4') //光标颜色
-              Row(){
-                Text('密码：').fontSize(16)
-                  .fontWeight(FontWeight.Bold)
-              }
-              .width('95%')
-              .justifyContent(FlexAlign.Start)
-              TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
-                .padding(20)
-                .type(InputType.Password)
-                .caretColor('#ecc4f4') //光标颜色
-              Row(){
-                Text('验证码：')
-                  .fontSize(16).fontWeight(FontWeight.Bold)
-              }
-              .width('95%')
-              .justifyContent(FlexAlign.Start)
-              //堆叠布局验证码和输入框
-              Stack(){
-                TextInput({ placeholder: "请输入接收到的验证码" })
-                  .padding(20)
-                  .type(InputType.Number);
-                Button() {
-                  Text(this.seconds > 0 ? `${this.seconds}秒|后重新获取` : '获取验证码')
-                    .fontColor(this.seconds > 0 ? "#4c74fc":"#121212")
-                    .fontSize(16);
-                }
-                .type(ButtonType.Normal)
-                .backgroundColor('#f4f4f4')
-                .margin({left:200})
-                .onClick(() => this.startCountdown());
-              }
+// 假设 preferences 实例的内容：只包含语言设置
+class Preferences {
+  language: string;
 
-              //确定按钮
-              buttonStyle("确定")
-              // 服务条款与隐私政策
-              uiTermsStyle();
-            }
-          }.tabBar('账号登录')
-          // 免密登录
-          // freePassLogin()//真机上无法调用
-          TabContent() {
-            // 内容
-            Column(){
-              Text(this.tellnumber)
-                .fontSize(40)
-              Column() {
-                buttonStyle("手机号一键登录")
-              }.margin({ top: 40 })
-              uiTermsStyle()
-            }
+  constructor(language: string) {
+    this.language = language;
+  }
 
-          }.tabBar('免密登录')
-        }
+  // 模拟获取首选项的功能
+  static getPreferences(context: Context, name: string): Promise<Preferences> {
+    // 假设根据 name 返回不同的配置
+    return new Promise((resolve, reject) => {
+      if (name === "userSettings") {
+        // 返回一个模拟的 userSettings 配置，包含语言设置
+        resolve(new Preferences("English"));
+      } else if (name === "appSettings") {
+        // 返回一个模拟的 appSettings 配置，包含语言设置
+        resolve(new Preferences("Chinese"));
+      } else {
+        // 如果找不到配置，返回错误
+        reject(new Error("Configuration not found"));
       }
-      .card()
-    }
-    .backgroundColor("#ecc4f4")
-    .width('100%')
-    .height('100%')
-  }
-  // 获取验证码按钮点击事件
-  startCountdown() {
-    if (this.seconds === 0) {
-      this.seconds = 60; // 设置倒计时为60秒
-
-      // 开始倒计时
-      const timerInterval = setInterval(() => {
-        this.seconds -= 1;
-
-        // 清除定时器并恢复按钮
-        if (this.seconds <= 0) {
-          clearInterval(timerInterval);
-          this.seconds = 0; // 重置倒计时
-        }
-      }, 1000);
-    }
+    });
   }
 }
+
+class PreferencesUtils {
+  // 存储多个首选项实例，Map 的键是首选项的名称，值是 Preferences 实例
+  preMap: Map<string, Preferences> = new Map();
+
+  // 获取首选实例的方法
+  loadPreference(context: Context, name: string) {
+    // 假设 preferences.getPreferences 是异步的，返回一个 Promise
+    Preferences.getPreferences(context, name)
+      .then(pref => {
+        // 将 name 和 pref 作为键值对存储到 preMap 中
+        this.preMap.set(name, pref);
+        console.log(`成功加载首选项: ${name}`);
+      })
+      .catch((reason: Error) => {
+        console.log('加载首选项失败', `错误信息: ${reason.message}`);
+      });
+  }
+
+  // 根据 name 获取对应的首选项实例
+  getPreference(name: string): Preferences | undefined {
+    return this.preMap.get(name);  // 根据 name 获取对应的 pref 实例
+  }
+}
+
+// 模拟 Preferences 实例和获取过程
+const preferencesUtils = new PreferencesUtils();
+
+// 假设 Context 是某种上下文对象，我们这里用 null 或其他值模拟
+const context: Context = {} as Context;  // 模拟一个空的上下文对象
+
+// 加载不同的首选项
+preferencesUtils.loadPreference(context, "userSettings");  // 加载 "userSettings"
+preferencesUtils.loadPreference(context, "appSettings");   // 加载 "appSettings"
+
+// 延时模拟一些操作，然后查询某个首选项
+setTimeout(() => {
+  // 获取并打印 "userSettings" 对应的首选项实例
+  const userSettings = preferencesUtils.getPreference("userSettings");
+  console.log('User Settings:', userSettings);
+
+  // 获取并打印 "appSettings" 对应的首选项实例
+  const appSettings = preferencesUtils.getPreference("appSettings");
+  console.log('App Settings:', appSettings);
+}, 2000);  // 等待 2 秒钟后执行查询

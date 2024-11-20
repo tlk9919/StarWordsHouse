@@ -1,5 +1,6 @@
 //目前所写的页面
 import { router } from '@kit.ArkUI'
+import { issueAnswerUI } from './IssueAnswerUI'
 
 class PageUrl{
   pageName:string
@@ -69,8 +70,10 @@ private currentPage:Array<PageUrl>=[
         }.tabBar(this.TabTitle('关心', $r('app.media.tab01_care'), $r('app.media.tab01_care_active'),0))
 
       TabContent() {
-        Text('问答')
-      }.tabBar(this.TabTitle('问答', $r('app.media.tab02_issueAns'), $r('app.media.tab02_issue_active'), 1))
+        issueAnswerUI()
+
+      }
+      .tabBar(this.TabTitle('问答', $r('app.media.tab02_issueAns'), $r('app.media.tab02_issue_active'), 1))
 
       TabContent() {
         Text('更多')
@@ -80,6 +83,7 @@ private currentPage:Array<PageUrl>=[
         Text('日历')
       }.tabBar(this.TabTitle('日历', $r('app.media.tab04_calendar'), $r('app.media.tab04_calendar_active'), 3))
     }
+
     .width('100%')
     .height('100%')
     //监听

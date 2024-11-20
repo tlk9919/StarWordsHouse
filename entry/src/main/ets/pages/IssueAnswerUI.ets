@@ -29,7 +29,7 @@ function card() {
 //问答界面样式
 @Entry
 @Component
-struct issueAnswerUI {
+export  struct  issueAnswerUI {
   //详细面板标记
   @State isShowPanel:boolean=false
   build() {
@@ -136,7 +136,7 @@ struct content {
             .fontSize(16)
             .fontColor('#fccccc')
         }
-        .backgroundColor('#f3f9fa')
+        .backgroundColor('rgba(0, 0, 0, 0)')
         .onClick(() => {
           // 切换显示状态，控制是显示全部文本还是前三个
           this.showAll = !this.showAll

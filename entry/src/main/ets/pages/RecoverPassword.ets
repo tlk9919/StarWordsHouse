@@ -1,5 +1,4 @@
-import { buttonStyle, Header, uiTermsStyle } from '../components/components';
-import { welcome } from "../components/components";
+import { buttonStyle, Header, uiTermsStyle, welcome } from '../components/components';
 @Styles
 //背部统一卡片样式
 function card() {
@@ -64,7 +63,11 @@ struct ForgetPassword {
                 Button() {
                   Text(this.seconds > 0 ? `${this.seconds}秒|后重新获取` : '获取验证码')
                     .fontColor(this.seconds > 0 ? "#4c74fc":"#121212")
-                    .fontSize(16);
+                    .fontSize(16)
+                  //
+                  .onClick(()=>{
+
+                  })
                 }
                 .type(ButtonType.Normal)
                 .backgroundColor('rgba(0, 0, 0, 0)')//透明颜色
