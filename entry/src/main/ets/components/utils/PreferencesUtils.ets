@@ -48,24 +48,25 @@ class PreferencesUtils {
         console.log('testTag', `保存Preferences [${name}.${key}=${value}]失败`,JSON.stringify(e))
       }
     }
+
     //读
-  // 读取首选项，确保返回布尔值
-  async getPreferenceValue(name: string, key: string, defaultValue: preferences.ValueType): Promise<boolean> {
+  async getPreferenceValue(name: string, key: string, defaultValue: preferences.ValueType) {
     if (!this.preMap.has(name)) {
-      console.log('加载首选项失败', `Preferences[${name}]未初始化`);
-      return defaultValue as boolean; // 如果没有初始化，返回默认值
+      console.log('加载首选项失败', `Preferences[${name}]未初始化`)
+      return
     }
     try {
       let pref = this.preMap.get(name);
       // 读取数据
       let value = await pref?.get(key,defaultValue); // 获取值
-      console.log('testTag', `读取Preferences [${name}.${key}=${value}]成功`);
-      return value as boolean; // 确保返回布尔值
+      console.log('testTag', `读取Preferences [${name}.${key}=${value}]成功`)
+      return value
     } catch (e) {
       console.log('testTag', `读取Preferences [${name}.${key}]失败`, JSON.stringify(e));
-      return defaultValue as boolean; // 出错时返回默认值
+      return defaultValue
     }
   }
+
 
 
 }

@@ -4,10 +4,10 @@ import { window } from '@kit.ArkUI';
 import PreferencesUtils from '../components/utils/PreferencesUtils'
 
 export default class EntryAbility extends UIAbility {
- async  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam){
+  async  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam){
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
     //加载Preferences
-    await PreferencesUtils.loadPreference(this.context,"mayPreferences01")
+    await PreferencesUtils.loadPreference(this.context,"mayPreferences")
   }
 
   onDestroy(): void {
