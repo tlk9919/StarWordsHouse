@@ -4,6 +4,8 @@ import {buttonStyle} from "../components/components"
 import {forgetPassword} from "../components/components"
 import {welcome} from "../components/components"
 import {freePassLogin} from "../components/components"
+import { isEmpty, isPhone } from '../components/utils/isEmptyUtils'
+
 @Styles
 //背部统一卡片样式
 function card() {
@@ -22,6 +24,8 @@ function card() {
 @Component
 struct  tab {
   @State tellnumber:string='188****8888'
+  @State mobileNumber:string=''//手机号
+  @State password:string=''//密码
   build() {
     Column() {
       //导航
@@ -34,6 +38,9 @@ struct  tab {
             }.width('100%').margin({top:30})
             TextInput({ placeholder: '请输入用户名/邮箱/账号' })
               .padding(20)
+              .onChange(value=>{
+                this.mobileNumber=value
+              })
             Row() {
               Text('密码：').fontSize(16).fontWeight(FontWeight.Bold)
             }.width('100%')
@@ -41,12 +48,60 @@ struct  tab {
             TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
               .padding(20)
               .type(InputType.Password)
+              .onChange(value=>{
+                this.password=value
+              })
             Column(){
               // 手机号登录与忘记密码
               forgetPassword()
               // 登录按钮
               Column() {
-                buttonStyle("登录")
+                Button('登录')
+                  .borderRadius(10)
+                  .backgroundColor("#ecc4f4")
+                  .type(ButtonType.Normal)
+                  .fontSize(20)
+                  .width(320)
+                  .height(60)
+                  .onClick(() => {
+                    console.log('testTag','手机号:', this.mobileNumber,'密码',this.password);
+                    if (isEmpty(this.mobileNumber)) {
+                      //提示
+                      AlertDialog.show({
+                        //点击其他
+                        autoCancel:true,
+                        title:'温馨提示',
+                        message:'请输入手机号'
+                      })
+                      return
+                    }
+                    //验证手机号格式
+                    if(!isPhone(this.mobileNumber)){
+                      AlertDialog.show({
+                        //点击其他
+                        autoCancel:true,
+                        title:'温馨提示',
+                        message:'请输入正确的手机号'
+                      })
+                    }
+                    //密码验证
+                    if(!isPhone(this.password)){
+                      AlertDialog.show({
+                        //点击其他
+                        autoCancel:true,
+                        title:'温馨提示',
+                        message:'请输入密码'
+                      })
+                    }
+                    if(!isPhone(this.password)){
+                      AlertDialog.show({
+                        //点击其他
+                        autoCancel:true,
+                        title:'温馨提示',
+                        message:'请输入符合格式的密码'
+                      })
+                    }
+                  });
               }
               .margin(20)
             }

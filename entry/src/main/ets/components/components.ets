@@ -47,7 +47,8 @@ export  struct  uiTermsStyle {
 
 //按钮
 @Builder
-export  function buttonStyle(buttonName:string){
+
+export function buttonStyle(buttonName: string, mobileNumber: string = '', password: string = '') {
   Button(buttonName)
     .borderRadius(10)
     .backgroundColor("#ecc4f4")
@@ -55,7 +56,13 @@ export  function buttonStyle(buttonName:string){
     .fontSize(20)
     .width(320)
     .height(60)
+    .onClick(() => {
+      console.log('testTag','手机号:', mobileNumber,'密码',password);
+
+    });
 }
+
+
 //手机号登录和忘记密码
 @Component
 export  struct forgetPassword  {

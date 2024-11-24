@@ -1,73 +1,117 @@
-import preferences from '@ohos.data.preferences';
-import { Context } from '@kit.AbilityKit';
+import { httpRequest } from '../components/utils/httpRequest.ts';  // 引入 HTTP 请求工具
 
-// 假设 preferences 实例的内容：只包含语言设置
-class Preferences {
-  language: string;
+@Entry
+@Component
+struct Register {
+  @State mobileNumber: string = '';  // 手机号
+  @State password: string = '';      // 密码
 
-  constructor(language: string) {
-    this.language = language;
-  }
-
-  // 模拟获取首选项的功能
-  static getPreferences(context: Context, name: string): Promise<Preferences> {
-    // 假设根据 name 返回不同的配置
-    return new Promise((resolve, reject) => {
-      if (name === "userSettings") {
-        // 返回一个模拟的 userSettings 配置，包含语言设置
-        resolve(new Preferences("English"));
-      } else if (name === "appSettings") {
-        // 返回一个模拟的 appSettings 配置，包含语言设置
-        resolve(new Preferences("Chinese"));
-      } else {
-        // 如果找不到配置，返回错误
-        reject(new Error("Configuration not found"));
-      }
-    });
-  }
-}
-
-class PreferencesUtils {
-  // 存储多个首选项实例，Map 的键是首选项的名称，值是 Preferences 实例
-  preMap: Map<string, Preferences> = new Map();
-
-  // 获取首选实例的方法
-  loadPreference(context: Context, name: string) {
-    // 假设 preferences.getPreferences 是异步的，返回一个 Promise
-    Preferences.getPreferences(context, name)
-      .then(pref => {
-        // 将 name 和 pref 作为键值对存储到 preMap 中
-        this.preMap.set(name, pref);
-        console.log(`成功加载首选项: ${name}`);
-      })
-      .catch((reason: Error) => {
-        console.log('加载首选项失败', `错误信息: ${reason.message}`);
+  // 注册按钮点击事件
+  async handleRegister() {
+    try {
+      const response = await httpRequest('POST', '/register', {
+        username: this.mobileNumber,
+        password: this.password
       });
+
+      if (response.message === '注册成功') {
+        AlertDialog.show({
+          title: '注册成功',
+          message: '可以使用注册的账号进行登录',
+          autoCancel: true
+        });
+      } else {
+        AlertDialog.show({
+          title: '注册失败',
+          message: response.message,
+          autoCancel: true
+        });
+      }
+    } catch (e) {
+      AlertDialog.show({
+        title: '请求失败',
+        message: '服务器错误，请稍后再试',
+        autoCancel: true
+      });
+    }
   }
 
-  // 根据 name 获取对应的首选项实例
-  getPreference(name: string): Preferences | undefined {
-    return this.preMap.get(name);  // 根据 name 获取对应的 pref 实例
+  // 登录按钮点击事件
+  async handleLogin() {
+    try {
+      const response = await httpRequest('POST', '/login', {
+        username: this.mobileNumber,
+        password: this.password
+      });
+
+      if (response.message === '登录成功') {
+        AlertDialog.show({
+          title: '登录成功',
+          message: '欢迎 ' + this.mobileNumber,
+          autoCancel: true
+        });
+        // 可以将返回的 token 存储在本地并进行页面跳转等操作
+      } else {
+        AlertDialog.show({
+          title: '登录失败',
+          message: response.message,
+          autoCancel: true
+        });
+      }
+    } catch (e) {
+      AlertDialog.show({
+        title: '请求失败',
+        message: '服务器错误，请稍后再试',
+        autoCancel: true
+      });
+    }
+  }
+
+  build() {
+    Column({ space: 10 }) {
+      // 用户名输入框
+      Row() {
+        Text('账号：').fontSize(16).fontWeight(FontWeight.Bold)
+      }.width('100%').margin({ top: 30 })
+
+      TextInput({ placeholder: '请输入用户名/邮箱/账号' })
+        .padding(20)
+        .onChange(value => {
+          this.mobileNumber = value;
+        })
+
+      // 密码输入框
+      Row() {
+        Text('密码：').fontSize(16).fontWeight(FontWeight.Bold)
+      }.width('100%')
+
+      TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
+        .padding(20)
+        .type(InputType.Password)
+        .onChange(value => {
+          this.password = value;
+        })
+
+      // 注册按钮
+      Button('注册')
+        .borderRadius(10)
+        .backgroundColor("#ecc4f4")
+        .type(ButtonType.Normal)
+        .fontSize(20)
+        .width(320)
+        .height(60)
+        .onClick(() => this.handleRegister())  // 调用注册处理函数
+
+      // 登录按钮
+      Button('登录')
+        .borderRadius(10)
+        .backgroundColor("#ecc4f4")
+        .type(ButtonType.Normal)
+        .fontSize(20)
+        .width(320)
+        .height(60)
+        .onClick(() => this.handleLogin())  // 调用登录处理函数
+    }
+    .padding({ top: 50, left: 20, right: 20 })
   }
 }
-
-// 模拟 Preferences 实例和获取过程
-const preferencesUtils = new PreferencesUtils();
-
-// 假设 Context 是某种上下文对象，我们这里用 null 或其他值模拟
-const context: Context = {} as Context;  // 模拟一个空的上下文对象
-
-// 加载不同的首选项
-preferencesUtils.loadPreference(context, "userSettings");  // 加载 "userSettings"
-preferencesUtils.loadPreference(context, "appSettings");   // 加载 "appSettings"
-
-// 延时模拟一些操作，然后查询某个首选项
-setTimeout(() => {
-  // 获取并打印 "userSettings" 对应的首选项实例
-  const userSettings = preferencesUtils.getPreference("userSettings");
-  console.log('User Settings:', userSettings);
-
-  // 获取并打印 "appSettings" 对应的首选项实例
-  const appSettings = preferencesUtils.getPreference("appSettings");
-  console.log('App Settings:', appSettings);
-}, 2000);  // 等待 2 秒钟后执行查询

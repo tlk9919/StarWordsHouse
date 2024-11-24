@@ -67,8 +67,6 @@ class PreferencesUtils {
     }
   }
 
-
-
 }
 
 const preferencesUtils = new PreferencesUtils();
