@@ -4,6 +4,8 @@
     "pages/RecoverPassword",
     "pages/IssueAnswerUI",
     "pages/RegisterLogin",
-    "pages/WelcomePage"
+    "pages/WelcomePage",
+    "pages/Register",
+    "pages/Login"
   ]
 }

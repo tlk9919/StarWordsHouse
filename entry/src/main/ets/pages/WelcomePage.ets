@@ -46,7 +46,7 @@ struct WelcomePage {
     setTimeout(()=>{
       router.replaceUrl(
         {
-          url:'pages/Index'
+          url:'pages/Register'
         },
         //跳转模式
         router.RouterMode.Single,

@@ -3,13 +3,17 @@ export function isEmpty(content:string):boolean{
   return ! (content &&content.trim().length>0)
 }
 
-//手机号非空
-export function isPhone(phone:string):boolean{
-  //中国手机号
-  let reg =/^1[3-9]\d{9}$/
-  return reg.test(phone)
+// 手机号和邮箱验证
+export function isPhone(input: string): boolean {
+  // 中国手机号正则
+  const phoneReg = /^1[3-9]\d{9}$/;
+  // 邮箱正则
+  const emailReg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
+  // 验证手机号或邮箱
+  return phoneReg.test(input) || emailReg.test(input);
 }
+
 
 //密码验证
 export function isPassword(password: string): boolean {

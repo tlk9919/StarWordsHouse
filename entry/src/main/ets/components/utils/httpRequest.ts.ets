@@ -1,9 +1,24 @@
-import axios, { AxiosResponse } from '@ohos/axios'
+import axios, { AxiosResponse } from '@ohos/axios';
 
-// 定义请求数据的类型
+// 定义不同请求类型的数据
+interface RegisterRequestData {
+  username: string;
+  password: string;
+  code?: string;  // 修改为 code
+}
+
 interface LoginRequestData {
   username: string;
   password: string;
+}
+
+interface SendVerificationCodeRequestData {
+  email: string;
+}
+
+interface VerifyCodeRequestData {
+  email: string;
+  code: string;  // 修改为 code
 }
 
 // 定义响应数据的类型
@@ -12,22 +27,35 @@ interface LoginResponseData {
   token?: string;
 }
 
+interface SendVerificationCodeResponseData {
+  message: string;
+}
+
+interface VerifyCodeResponseData {
+  message: string;
+}
+
 // 封装 HTTP 请求工具
-export async function httpRequest(method: string, url: string, data?: LoginRequestData): Promise<LoginResponseData> {
+export async function httpRequest(
+  method: string,
+  url: string,
+  data?: RegisterRequestData | LoginRequestData | SendVerificationCodeRequestData | VerifyCodeRequestData // 使用联合类型
+): Promise<LoginResponseData | SendVerificationCodeResponseData | VerifyCodeResponseData> {  // 扩展响应类型
   try {
-    // 执行请求并明确指定响应类型为 AxiosResponse<LoginResponseData>
-    const response: AxiosResponse<LoginResponseData> = await axios({
+    // 执行请求并明确指定响应类型
+    const response: AxiosResponse<LoginResponseData | SendVerificationCodeResponseData | VerifyCodeResponseData> = await axios({
       method,
-      url: `http://localhost:3000${url}`,  // 后端接口地址
+      url: `http://43.140.214.215:3000${url}`,  // 后端接口地址
+      // url: `http://localhost:3000${url}`,  // 后端接口地址
       data,
-    })
+    });
 
     // 返回响应数据
-    return response.data
+    return response.data;
   } catch (error) {
-    console.error('HTTP 请求失败:', error)
+    console.error('HTTP 请求失败:', error);
 
     // 抛出一个明确类型的错误对象
-    throw new Error('请求失败，请稍后再试')
+    throw new Error('请求失败，请稍后再试');
   }
 }
