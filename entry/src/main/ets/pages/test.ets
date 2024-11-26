@@ -4,8 +4,9 @@ import { httpRequest } from '../components/utils/httpRequest.ts';  // 引入 HTT
 @Component
 struct Register {
   @State mobileNumber: string = '';  // 手机号（或邮箱）
-  @State password: string = '';      // 密码
-  @State code: string = ''; // 用户输入的验证码
+  @State newPassword: string = '';   // 新密码
+  @State confirmPassword: string = ''; // 确认新密码
+  @State code: string = '';          // 用户输入的验证码
   @State isCodeSent: boolean = false;  // 是否已发送验证码
   @State countdown: number = 60;       // 验证码倒计时
   @State isCodeVerified: boolean = false;  // 验证码是否验证成功
@@ -17,8 +18,7 @@ struct Register {
         email: this.mobileNumber  // 假设是邮箱
       });
 
-      // 打印真实响应数据
-      console.log('验证码发送响应:', response);  // 打印服务器响应数据
+      console.log('验证码发送响应:', response);
       if (response.message === '验证码发送成功') {
         AlertDialog.show({
           title: '验证码已发送',
@@ -36,7 +36,7 @@ struct Register {
       }
 
     } catch (e) {
-      console.error('请求错误:', e);  // 打印错误信息
+      console.error('请求错误:', e);
       AlertDialog.show({
         title: '请求失败',
         message: '服务器错误，请稍后再试',
@@ -48,38 +48,36 @@ struct Register {
   // 验证验证码的接口
   async validateVerificationCode() {
     try {
-      // 打印发送的数据（真实的邮箱和验证码）
-      console.log('发送的数据:', { email: this.mobileNumber, code: this.code });  // 打印邮箱和验证码
+      console.log('发送的数据:', { email: this.mobileNumber, code: this.code });
 
       const response = await httpRequest('POST', '/verify-code', {
-        email: this.mobileNumber,  // 或者是手机号
+        email: this.mobileNumber,
         code: this.code  // 修改为 code
       });
 
-      // 打印真实的验证码验证响应
-      console.log('验证码验证响应:', response); // 打印服务器返回的响应
+      console.log('验证码验证响应:', response);
 
       if (response.message === '验证码验证成功') {
         this.isCodeVerified = true;  // 更新状态，验证码验证成功
-        return true;  // 验证成功返回 true
+        return true;
       } else {
-        this.isCodeVerified = false;  // 如果验证失败，保持为 false
+        this.isCodeVerified = false;
         AlertDialog.show({
           title: '验证失败',
           message: response.message || '验证码错误，请重新输入。',
           autoCancel: true
         });
-        return false;  // 验证失败返回 false
+        return false;
       }
     } catch (e) {
-      console.error('验证请求失败:', e); // 打印捕获的错误信息
+      console.error('验证请求失败:', e);
       this.isCodeVerified = false;
       AlertDialog.show({
         title: '请求失败',
         message: '验证失败，请稍后再试。',
         autoCancel: true
       });
-      return false;  // 验证失败返回 false
+      return false;
     }
   }
 
@@ -91,30 +89,89 @@ struct Register {
         this.startCountdown();
       }, 1000);
     } else {
-      this.isCodeSent = false;  // 倒计时结束，恢复发送验证码的状态
+      this.isCodeSent = false;
+    }
+  }
+
+  // 修改密码按钮点击事件
+  async handleChangePassword() {
+    // 校验新密码和确认密码是否一致
+    if (this.newPassword !== this.confirmPassword) {
+      AlertDialog.show({
+        title: '密码错误',
+        message: '新密码和确认密码不一致，请重新输入。',
+        autoCancel: true
+      });
+      return;
+    }
+
+    // 校验密码格式
+    if (this.newPassword.length < 6 || this.newPassword.length > 20) {
+      AlertDialog.show({
+        title: '密码长度错误',
+        message: '新密码必须为6到20个字符。',
+        autoCancel: true
+      });
+      return;
+    }
+
+    // 先验证验证码
+    const isCodeVerified = await this.validateVerificationCode();
+    if (!isCodeVerified) {
+      return;  // 如果验证码验证失败，则不继续执行修改密码
+    }
+
+    // 发送修改密码请求
+    try {
+      console.log('修改密码请求的数据:', { email: this.mobileNumber, newPassword: this.newPassword, code: this.code });
+
+      const response = await httpRequest('POST', '/change-password-with-code', {
+        email: this.mobileNumber,
+        newPassword: this.newPassword,  // 新密码
+        code: this.code  // 验证码
+      });
+
+      console.log('修改密码响应:', response);
+
+      if (response.message === '密码修改成功') {
+        AlertDialog.show({
+          title: '修改成功',
+          message: '您的密码已成功修改，请使用新密码登录。',
+          autoCancel: true
+        });
+      } else {
+        AlertDialog.show({
+          title: '修改失败',
+          message: response.message,
+          autoCancel: true
+        });
+      }
+    } catch (e) {
+      AlertDialog.show({
+        title: '请求失败',
+        message: '服务器错误，请稍后再试',
+        autoCancel: true
+      });
     }
   }
 
   // 注册按钮点击事件
   async handleRegister() {
-    // 先验证验证码
     const isCodeVerified = await this.validateVerificationCode();
     if (!isCodeVerified) {
-      return;  // 如果验证码验证失败，则不继续执行注册
+      return;
     }
 
     try {
-      // 打印注册时的数据（真实的用户名、密码和验证码）
-      console.log('注册请求的数据:', { username: this.mobileNumber, password: this.password, code: this.code });
+      console.log('注册请求的数据:', { username: this.mobileNumber, newPassword: this.newPassword, code: this.code });
 
       const response = await httpRequest('POST', '/register', {
         username: this.mobileNumber,
-        password: this.password,
-        code: this.code  // 提交验证码，改为 code
+        password: this.newPassword,
+        code: this.code
       });
 
-      // 打印注册响应
-      console.log('注册响应:', response);  // 打印服务器返回的响应
+      console.log('注册响应:', response);
 
       if (response.message === '注册成功') {
         AlertDialog.show({
@@ -138,43 +195,8 @@ struct Register {
     }
   }
 
-  // 登录按钮点击事件
-  async handleLogin() {
-    try {
-      const response = await httpRequest('POST', '/login', {
-        username: this.mobileNumber,
-        password: this.password
-      });
-
-      // 打印登录响应数据
-      console.log('登录响应:', response);  // 打印服务器响应数据
-
-      if (response.message === '登录成功') {
-        AlertDialog.show({
-          title: '登录成功',
-          message: '欢迎 ' + this.mobileNumber,
-          autoCancel: true
-        });
-        // 可以将返回的 token 存储在本地并进行页面跳转等操作
-      } else {
-        AlertDialog.show({
-          title: '登录失败',
-          message: response.message,
-          autoCancel: true
-        });
-      }
-    } catch (e) {
-      AlertDialog.show({
-        title: '请求失败',
-        message: '服务器错误，请稍后再试',
-        autoCancel: true
-      });
-    }
-  }
-
   build() {
     Column({ space: 10 }) {
-      // 用户名/邮箱输入框
       Row() {
         Text('账号（邮箱）：').fontSize(16).fontWeight(FontWeight.Bold)
       }.width('100%').margin({ top: 30 })
@@ -185,19 +207,28 @@ struct Register {
           this.mobileNumber = value;
         })
 
-      // 密码输入框
       Row() {
-        Text('密码：').fontSize(16).fontWeight(FontWeight.Bold)
+        Text('新密码：').fontSize(16).fontWeight(FontWeight.Bold)
       }.width('100%')
 
-      TextInput({ placeholder: '请输入密码(6-20个数字和字母)' })
+      TextInput({ placeholder: '请输入新密码(6-20个数字和字母)' })
         .padding(20)
         .type(InputType.Password)
         .onChange(value => {
-          this.password = value;
+          this.newPassword = value;
         })
 
-      // 验证码输入框
+      Row() {
+        Text('确认密码：').fontSize(16).fontWeight(FontWeight.Bold)
+      }.width('100%')
+
+      TextInput({ placeholder: '请再次输入新密码' })
+        .padding(20)
+        .type(InputType.Password)
+        .onChange(value => {
+          this.confirmPassword = value;
+        })
+
       Row() {
         Text('验证码：').fontSize(16).fontWeight(FontWeight.Bold)
       }.width('100%')
@@ -207,7 +238,7 @@ struct Register {
           .width('70%')
           .padding(20)
           .onChange(value => {
-            this.code = value;  // 修改为 code
+            this.code = value;
           })
 
         Button('发送验证码')
@@ -217,28 +248,17 @@ struct Register {
           .fontSize(14)
           .width(80)
           .height(50)
-          .onClick(() => this.handleSendVerificationCode())  // 调用发送验证码处理函数
+          .onClick(() => this.handleSendVerificationCode())
       }
 
-      // 注册按钮
-      Button('注册')
+      Button('修改密码')
         .borderRadius(10)
         .backgroundColor("#ecc4f4")
         .type(ButtonType.Normal)
         .fontSize(20)
         .width(320)
         .height(60)
-        .onClick(() => this.handleRegister())  // 调用注册处理函数
-
-      // 登录按钮
-      Button('登录')
-        .borderRadius(10)
-        .backgroundColor("#ecc4f4")
-        .type(ButtonType.Normal)
-        .fontSize(20)
-        .width(320)
-        .height(60)
-        .onClick(() => this.handleLogin())  // 调用登录处理函数
+        .onClick(() => this.handleChangePassword())
     }
     .padding({ top: 50, left: 20, right: 20 })
   }
