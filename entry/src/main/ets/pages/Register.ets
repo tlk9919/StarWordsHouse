@@ -1,6 +1,7 @@
 import { buttonStyle, Header, uiTermsStyle, welcome } from '../components/components';
 import { httpRequest } from '../components/utils/httpRequest.ts';  // 引入 HTTP 请求工具
 import { router } from '@kit.ArkUI';
+import { isEmpty, isPassword, isPhone, isVerificationCode } from '../components/utils/isEmptyUtils'
 
 @Styles
 //背部统一卡片样式
@@ -22,8 +23,8 @@ struct Register {
 
   @State tellnumber:string='188****8888'
   @State seconds: number = 0;  // 初始化
-  @State mobileNumberOrEmail: string = '';  // 手机号（或邮箱）
-  @State password: string = '';      // 密码
+  @State mobileNumberOrEmail: string = '991988677@qq.com'; // 手机号（或邮箱）
+  @State password: string = '123456789abc';      // 密码
   @State code: string = ''; // 用户输入的验证码
   @State isCodeSent: boolean = false;  // 是否已发送验证码
   @State isCodeVerified: boolean = false;  // 验证码是否验证成功
@@ -35,7 +36,7 @@ struct Register {
       });
 
       // 打印真实响应数据
-      console.log('验证码发送响应:', response);  // 打印服务器响应数据
+      console.log( 'testTag', '验证码发送响应:',  JSON.stringify(response));  // 打印服务器响应数据
       if (response.message === '验证码发送成功') {
         AlertDialog.show({
           title: '验证码已发送',
@@ -65,42 +66,57 @@ struct Register {
   // 验证验证码的接口
   async validateVerificationCode() {
     try {
-      // 打印发送的数据（真实的邮箱和验证码）
-      console.log('发送的数据:', { email: this.mobileNumberOrEmail, code: this.code });  // 打印邮箱和验证码
+      // 打印发送的数据（邮箱或手机号，验证码）
+      console.log('发送的数据:', JSON.stringify({ email: this.mobileNumberOrEmail, code: this.code }));
 
+      // 请求验证码验证接口
       const response = await httpRequest('POST', '/verify-code', {
-        email: this.mobileNumberOrEmail,  // 或者是手机号
-        code: this.code  // 修改为 code
+        email: this.mobileNumberOrEmail,
+        code: this.code
       });
 
-      // 打印真实的验证码验证响应
-      console.log('验证码验证响应:', response); // 打印服务器返回的响应
+      // 打印服务器返回的响应数据
+      console.log('验证码验证响应:', JSON.stringify(response));
 
       if (response.message === '验证码验证成功') {
-        this.isCodeVerified = true;  // 更新状态，验证码验证成功
-        return true;  // 验证成功返回 true
+        this.isCodeVerified = true;  // 更新状态，表示验证码验证通过
+        return true;
       } else {
-        this.isCodeVerified = false;  // 如果验证失败，保持为 false
+        this.isCodeVerified = false;
         AlertDialog.show({
           title: '验证失败',
           message: response.message || '验证码错误，请重新输入。',
           autoCancel: true
         });
-        return false;  // 验证失败返回 false
+        return false;
       }
     } catch (e) {
-      console.error('验证请求失败:', e); // 打印捕获的错误信息
+      // 捕获错误并显示提示
+      console.error('验证请求失败:', e);
       this.isCodeVerified = false;
+
       AlertDialog.show({
-        title: '请求失败',
-        message: '验证失败，请稍后再试。',
+        title: '验证失败',
+        message: e.message || '验证码错误，请重新输入。',
         autoCancel: true
       });
-      return false;  // 验证失败返回 false
+
+      return false;  // 返回失败
     }
   }
+
+
   // 注册按钮点击事件
   async handleRegister() {
+    // 校验是否已获取验证码
+    if (!this.isCodeSent) {
+      AlertDialog.show({
+        title: '温馨提示',
+        message: '请先获取验证码',
+        autoCancel: true
+      });
+      return;
+    }
     // 先验证验证码
     const isCodeVerified = await this.validateVerificationCode();
     if (!isCodeVerified) {
@@ -109,7 +125,7 @@ struct Register {
 
     try {
       // 打印注册时的数据（真实的用户名、密码和验证码）
-      console.log('注册请求的数据:', { username: this.mobileNumberOrEmail, password: this.password, code: this.code });
+      console.log( 'testTag', '注册请求的数据:',  JSON.stringify({ username: this.mobileNumberOrEmail, password: this.password, code: this.code }));
 
       const response = await httpRequest('POST', '/register', {
         username: this.mobileNumberOrEmail,
@@ -118,7 +134,7 @@ struct Register {
       });
 
       // 打印注册响应
-      console.log('注册响应:', response);  // 打印服务器返回的响应
+      console.log('注册响应:',JSON.stringify(response));  // 打印服务器返回的响应
 
       if (response.message === '注册成功') {
         AlertDialog.show({
@@ -209,7 +225,7 @@ struct Register {
                   this.password = value;
                 })
               //确定按钮
-              Text('注册成功去登录')
+              Text('注册成功?去登录吧')
                 .fontSize(15)
                 .fontColor('#636e72')
                 .onClick(()=>{
@@ -231,7 +247,71 @@ struct Register {
                 .fontSize(20)
                 .width(320)
                 .height(60)
-                .onClick(() => this.handleRegister())  // 调用注册处理函数
+                .onClick(() =>{
+                  if (isEmpty(this.mobileNumberOrEmail)) {
+                    //提示
+                    AlertDialog.show({
+                      //点击其他
+                      autoCancel:true,
+                      title:'温馨提示',
+                      message:'全部填写完才能注册哦'
+                    })
+                    return
+                  }
+                  // 1. 校验手机号（或邮箱）是否为空
+                  if (isEmpty(this.mobileNumberOrEmail)) {
+                    AlertDialog.show({
+                      autoCancel: true,
+                      title: '温馨提示',
+                      message: '请输入手机号或邮箱'
+                    });
+                    return;
+                  }
+
+                  // 2. 校验手机号格式是否正确
+                  if (!isPhone(this.mobileNumberOrEmail)) {
+                    AlertDialog.show({
+                      autoCancel: true,
+                      title: '温馨提示',
+                      message: '请输入正确的手机号或邮箱'
+                    });
+                    return;
+                  }
+
+                  // 3. 校验验证码是否为空
+                  if (!isVerificationCode(this.code)) {
+                    AlertDialog.show({
+                      autoCancel: true,
+                      title: '温馨提示',
+                      message: '请输入验证码'
+                    });
+                    return;
+                  }
+
+                  // 4. 校验密码是否为空
+                  if (isEmpty(this.password)) {
+                    AlertDialog.show({
+                      autoCancel: true,
+                      title: '温馨提示',
+                      message: '请输入密码'
+                    });
+                    return;
+                  }
+
+                  // 5. 校验密码格式是否符合要求（6-20个字母和数字的组合）
+                  if (!isPassword(this.password)) {
+                    AlertDialog.show({
+                      autoCancel: true,
+                      title: '温馨提示',
+                      message: '密码需包含字母和数字，且长度至少为6位'
+                    });
+                    return;
+                  }
+
+                  // 6. 如果所有验证都通过，调用注册处理函数
+                  this.handleRegister();
+                  }
+                )
               // 服务条款与隐私政策
               uiTermsStyle();
             }

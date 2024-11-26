@@ -1,6 +1,6 @@
-//内容非空
-export function isEmpty(content:string):boolean{
-  return ! (content &&content.trim().length>0)
+// 内容非空
+export function isEmpty(content: string): boolean {
+  return !(content && content.trim().length > 0);
 }
 
 // 手机号和邮箱验证
@@ -14,10 +14,14 @@ export function isPhone(input: string): boolean {
   return phoneReg.test(input) || emailReg.test(input);
 }
 
-
-//密码验证
+// 密码验证
 export function isPassword(password: string): boolean {
   // 密码验证：至少包含 6 位，且字母与数字的组合
-  let reg = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/
+  let reg = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
   return reg.test(password);
+}
+
+// 验证码非空验证
+export function isVerificationCode(code: string): boolean {
+  return !(code && code.trim().length === 0);  // 判断验证码是否为空
 }

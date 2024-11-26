@@ -46,7 +46,6 @@ export async function httpRequest(
     const response: AxiosResponse<LoginResponseData | SendVerificationCodeResponseData | VerifyCodeResponseData> = await axios({
       method,
       url: `http://43.140.214.215:3000${url}`,  // 后端接口地址
-      // url: `http://localhost:3000${url}`,  // 后端接口地址
       data,
     });
 
@@ -55,7 +54,21 @@ export async function httpRequest(
   } catch (error) {
     console.error('HTTP 请求失败:', error);
 
-    // 抛出一个明确类型的错误对象
-    throw new Error('请求失败，请稍后再试');
+    // 判断错误类型并进行相应处理
+    if (error.response) {
+      // 如果有响应对象（后端返回了错误信息）
+      console.error('后端错误响应:', error.response);  // 打印后端的错误响应
+
+      // 抛出带有响应信息的错误
+      throw new Error(error.response.data?.message || '请求失败，请稍后再试');
+    } else if (error.request) {
+      // 如果没有收到响应（可能是网络错误或超时）
+      console.error('没有收到响应:', error.request);
+      throw new Error('请求超时，请检查网络连接');
+    } else {
+      // 其他错误
+      console.error('错误信息:', error.message);
+      throw new Error('请求失败，请稍后再试');
+    }
   }
 }
