@@ -6,6 +6,7 @@
     "pages/RegisterLogin",
     "pages/WelcomePage",
     "pages/Register",
-    "pages/Login"
+    "pages/Login",
+    "pages/test"
   ]
 }

@@ -3,11 +3,14 @@ import { common } from '@kit.AbilityKit'
 import PreferencesUtils from '../components/utils/PreferencesUtils'
 import { router } from '@kit.ArkUI'
 
-const PREF_NAME = "mayPreferences";
-const PRE_KEY='PrivacyKey'
+const PREF_NAME01 = "myPreferences";
+const PRE_KEY01='PrivacyKey'
+const PREF_NAME02 = "myPreference_register";
+const PRE_KEY02='registerKey'
 @Entry
 @Component
 struct WelcomePage {
+
   //获取实例信息
   context=getContext(this) as common.UIAbilityContext
   //声明弹窗
@@ -16,14 +19,13 @@ struct WelcomePage {
       confirm:():void=>this.onConfirm(),
       cancel:():void=>this.exitApp(),
     })
-
   })
 
   onConfirm(){
     //保存首选项
-    PreferencesUtils.putPreferenceValue(PREF_NAME,PRE_KEY,true)
-    //跳转首页
-    this.jumpToIndex()
+    PreferencesUtils.putPreferenceValue(PREF_NAME01,PRE_KEY01,true)
+    //跳转
+    this.jumpToRegister()
   }
   exitApp(){
     //退出
@@ -32,17 +34,24 @@ struct WelcomePage {
 
   async aboutToAppear() {
     // 加载首选项
-    let isAgree = await PreferencesUtils.getPreferenceValue(PREF_NAME, PRE_KEY, false);
-
+    let isAgree = await PreferencesUtils.getPreferenceValue(PREF_NAME01, PRE_KEY01, false)
+    // 检查注册状态
+    let isRegistered = await PreferencesUtils.getPreferenceValue(PREF_NAME02, PRE_KEY02, false);
     // 判断
     if (isAgree) {
-      this.jumpToIndex();
+      if (isRegistered) {
+        // 跳转到主页面（或应用内部）
+        router.replaceUrl({ url: 'pages/Index' }, router.RouterMode.Single);
+      } else {
+        // 跳转到注册页面
+        this.jumpToRegister();
+      }
     } else {
+      // 打开隐私政策弹窗
       this.controller.open();
     }
   }
-
-  jumpToIndex(){
+  jumpToRegister(){
     setTimeout(()=>{
       router.replaceUrl(
         {

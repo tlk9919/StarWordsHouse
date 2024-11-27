@@ -2,7 +2,10 @@ import { buttonStyle, Header, uiTermsStyle, welcome } from '../components/compon
 import { httpRequest } from '../components/utils/httpRequest.ts';  // 引入 HTTP 请求工具
 import { router } from '@kit.ArkUI';
 import { isEmpty, isPassword, isPhone, isVerificationCode } from '../components/utils/isEmptyUtils'
+import PreferencesUtils from '../components/utils/PreferencesUtils';
 
+const PREF_NAME02 = "myPreference_register";
+const PRE_KEY02='registerKey'
 @Styles
 //背部统一卡片样式
 function card() {
@@ -28,6 +31,15 @@ struct Register {
   @State code: string = ''; // 用户输入的验证码
   @State isCodeSent: boolean = false;  // 是否已发送验证码
   @State isCodeVerified: boolean = false;  // 验证码是否验证成功
+
+  async onRegisterComplete() {
+    // 保存注册状态
+    await PreferencesUtils.putPreferenceValue(PREF_NAME02, PRE_KEY02, true);
+    // 跳转到主页面
+    router.replaceUrl({ url: 'pages/Index' }, router.RouterMode.Single);
+  }
+
+
   // 发送验证码按钮点击事件
   async handleSendVerificationCode() {
     try {
@@ -224,15 +236,17 @@ struct Register {
                 .onChange(value => {
                   this.password = value;
                 })
-              //确定按钮
-              Text('注册成功?去登录吧')
+              Text('已有账号?去登录吧')
                 .fontSize(15)
                 .fontColor('#636e72')
                 .onClick(()=>{
-                  router.pushUrl(
+                  router.replaceUrl(
                     {
                       url:'pages/Login'
                     },
+                    //跳转模式
+                    router.RouterMode.Single,
+                    //失败的回调
                     err=>{
                       if (err) {
                         console.log(`路由失败 errCode:${err.code} ,errMsg:${err.message}`)
@@ -248,68 +262,9 @@ struct Register {
                 .width(320)
                 .height(60)
                 .onClick(() =>{
-                  if (isEmpty(this.mobileNumberOrEmail)) {
-                    //提示
-                    AlertDialog.show({
-                      //点击其他
-                      autoCancel:true,
-                      title:'温馨提示',
-                      message:'全部填写完才能注册哦'
-                    })
-                    return
-                  }
-                  // 1. 校验手机号（或邮箱）是否为空
-                  if (isEmpty(this.mobileNumberOrEmail)) {
-                    AlertDialog.show({
-                      autoCancel: true,
-                      title: '温馨提示',
-                      message: '请输入手机号或邮箱'
-                    });
-                    return;
-                  }
-
-                  // 2. 校验手机号格式是否正确
-                  if (!isPhone(this.mobileNumberOrEmail)) {
-                    AlertDialog.show({
-                      autoCancel: true,
-                      title: '温馨提示',
-                      message: '请输入正确的手机号或邮箱'
-                    });
-                    return;
-                  }
-
-                  // 3. 校验验证码是否为空
-                  if (!isVerificationCode(this.code)) {
-                    AlertDialog.show({
-                      autoCancel: true,
-                      title: '温馨提示',
-                      message: '请输入验证码'
-                    });
-                    return;
-                  }
-
-                  // 4. 校验密码是否为空
-                  if (isEmpty(this.password)) {
-                    AlertDialog.show({
-                      autoCancel: true,
-                      title: '温馨提示',
-                      message: '请输入密码'
-                    });
-                    return;
-                  }
-
-                  // 5. 校验密码格式是否符合要求（6-20个字母和数字的组合）
-                  if (!isPassword(this.password)) {
-                    AlertDialog.show({
-                      autoCancel: true,
-                      title: '温馨提示',
-                      message: '密码需包含字母和数字，且长度至少为6位'
-                    });
-                    return;
-                  }
-
-                  // 6. 如果所有验证都通过，调用注册处理函数
+                  //注册处理函数
                   this.handleRegister();
+                  this.onRegisterComplete()
                   }
                 )
               // 服务条款与隐私政策

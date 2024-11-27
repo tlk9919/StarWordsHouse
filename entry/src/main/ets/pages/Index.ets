@@ -36,9 +36,12 @@ struct  indexHome {
   //创建一个数组存放目前写的目录
 private currentPage:Array<PageUrl>=[
   new PageUrl('问答界面','pages/IssueAnswerUI'),
+  new PageUrl('注册界面', 'pages/Register'),
+  new PageUrl('登录界面', 'pages/Login'),
   new PageUrl('登录注册界面', 'pages/RegisterLogin'),
   new PageUrl('忘记密码界面', 'pages/RecoverPassword'),
   new PageUrl('欢迎界面', 'pages/WelcomePage'),
+  new PageUrl('找回密码测试界面', 'pages/test'),
 
 ]
 

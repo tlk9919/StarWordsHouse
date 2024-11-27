@@ -25,16 +25,16 @@ class PreferencesUtils {
     try {
       let pref = await preferences.getPreferences(context, name)
       this.preMap.set(name, pref)
-      console.log(`成功加载首选项: ${name}`);
+      console.log(`testTag: ${name}`);
     } catch (e) {
-      console.log('加载首选项失败',`加载Preferences失败[${name}]失败`,JSON.stringify(e))
+      console.log('testTag',`加载Preferences失败[${name}]失败`,JSON.stringify(e))
     }
 
     }
     //写
     async putPreferenceValue(name:string,key:string,value:preferences.ValueType){
     if(!this.preMap.has(name)){
-      console.log('加载首选项失败',`Preferences[${name}]未初始化`)
+      console.log('testTag',`Preferences[${name}]未初始化`)
       return
     }
       try {
@@ -52,7 +52,7 @@ class PreferencesUtils {
     //读
   async getPreferenceValue(name: string, key: string, defaultValue: preferences.ValueType) {
     if (!this.preMap.has(name)) {
-      console.log('加载首选项失败', `Preferences[${name}]未初始化`)
+      console.log('testTag', `Preferences[${name}]未初始化`)
       return
     }
     try {
