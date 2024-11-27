@@ -109,43 +109,7 @@ struct  tab {
                   .width(320)
                   .height(60)
                   .onClick(() => {
-                    console.log('testTag','手机号:', this.mobileNumber,'密码',this.password);
-                    if (isEmpty(this.mobileNumber)) {
-                      //提示
-                      AlertDialog.show({
-                        //点击其他
-                        autoCancel:true,
-                        title:'温馨提示',
-                        message:'请输入手机号'
-                      })
-                      return
-                    }
-                    //验证手机号格式
-                    if(!isPhone(this.mobileNumber)){
-                      AlertDialog.show({
-                        //点击其他
-                        autoCancel:true,
-                        title:'温馨提示',
-                        message:'请输入正确的手机号'
-                      })
-                    }
-                    //密码验证
-                    if(!isPhone(this.password)){
-                      AlertDialog.show({
-                        //点击其他
-                        autoCancel:true,
-                        title:'温馨提示',
-                        message:'请输入密码'
-                      })
-                    }
-                    if(!isPhone(this.password)){
-                      AlertDialog.show({
-                        //点击其他
-                        autoCancel:true,
-                        title:'温馨提示',
-                        message:'请输入符合格式的密码'
-                      })
-                    }
+                    console.log('testTag','手机号:', this.mobileNumber,'密码',this.password)
                     this.handleLogin() // 调用登录处理函数
                   });
               }

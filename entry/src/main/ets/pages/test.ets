@@ -125,7 +125,7 @@ struct ForgetPassword {
     try {
       console.log('修改密码请求的数据:',JSON.stringify({ email: this.mobileNumber, newPassword: this.newPassword, code: this.code }));
 
-      const response = await httpRequest('POST', '/reset-password', {
+      const response = await httpRequest('PUT', '/reset-password', {
         email: this.mobileNumber,
         newPassword: this.newPassword,
         confirmPassword: this.confirmPassword,

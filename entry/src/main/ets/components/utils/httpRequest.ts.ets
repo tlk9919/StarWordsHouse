@@ -76,7 +76,8 @@ LoginResponseData
     // 执行请求并明确指定响应类型
     const response: AxiosResponse = await axios({
       method,
-      url: `http://localhost:3000${url}`,  // 后端接口地址
+      // url: `http://localhost:3000${url}`,  // 后端接口地址
+      url: `http://43.140.214.215:3000${url}`,  // 后端接口地址
       data,
     });
 

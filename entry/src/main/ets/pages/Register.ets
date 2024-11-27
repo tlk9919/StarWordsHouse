@@ -23,7 +23,7 @@ struct Register {
 
   @State tellnumber:string='188****8888'
   @State seconds: number = 0;  // 初始化
-  @State mobileNumberOrEmail: string = '2331293852@qq.com'; // 手机号（或邮箱）
+  @State mobileNumberOrEmail: string = '991988677@qq.com'; // 手机号（或邮箱）
   @State password: string = '123456789abc';      // 密码
   @State code: string = ''; // 用户输入的验证码
   @State isCodeSent: boolean = false;  // 是否已发送验证码
