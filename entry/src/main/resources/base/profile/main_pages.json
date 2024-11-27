@@ -1,12 +1,12 @@
 {
   "src": [
-    "pages/Index",
-    "pages/RecoverPassword",
-    "pages/IssueAnswerUI",
-    "pages/RegisterLogin",
-    "pages/WelcomePage",
-    "pages/Register",
-    "pages/Login",
-    "pages/test"
+    "pages/Home/Index",
+    "pages/RecoverPassword/RecoverPassword",
+    "pages/IssueAnswerUI/IssueAnswerUI",
+    "pages/RegisterLogin/RegisterLogin",
+    "pages/Welcome/WelcomePage",
+    "pages/Register/Register",
+    "pages/Login/Login",
+    "pages/Test/test"
   ]
 }
