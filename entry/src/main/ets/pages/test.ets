@@ -2,10 +2,10 @@ import { httpRequest } from '../components/utils/httpRequest.ts';  // 引入 HTT
 
 @Entry
 @Component
-struct Register {
-  @State mobileNumber: string = '';  // 手机号（或邮箱）
-  @State newPassword: string = '';   // 新密码
-  @State confirmPassword: string = ''; // 确认新密码
+struct ForgetPassword {
+  @State mobileNumber: string = '991988677@qq.com';  // 手机号（或邮箱）
+  @State newPassword: string = '991988677ab';   // 新密码
+  @State confirmPassword: string = '991988677ab'; // 确认新密码
   @State code: string = '';          // 用户输入的验证码
   @State isCodeSent: boolean = false;  // 是否已发送验证码
   @State countdown: number = 60;       // 验证码倒计时
@@ -123,12 +123,13 @@ struct Register {
 
     // 发送修改密码请求
     try {
-      console.log('修改密码请求的数据:', { email: this.mobileNumber, newPassword: this.newPassword, code: this.code });
+      console.log('修改密码请求的数据:',JSON.stringify({ email: this.mobileNumber, newPassword: this.newPassword, code: this.code }));
 
-      const response = await httpRequest('POST', '/change-password-with-code', {
+      const response = await httpRequest('POST', '/reset-password', {
         email: this.mobileNumber,
-        newPassword: this.newPassword,  // 新密码
-        code: this.code  // 验证码
+        newPassword: this.newPassword,
+        confirmPassword: this.confirmPassword,
+        code: this.code
       });
 
       console.log('修改密码响应:', response);
@@ -142,46 +143,6 @@ struct Register {
       } else {
         AlertDialog.show({
           title: '修改失败',
-          message: response.message,
-          autoCancel: true
-        });
-      }
-    } catch (e) {
-      AlertDialog.show({
-        title: '请求失败',
-        message: '服务器错误，请稍后再试',
-        autoCancel: true
-      });
-    }
-  }
-
-  // 注册按钮点击事件
-  async handleRegister() {
-    const isCodeVerified = await this.validateVerificationCode();
-    if (!isCodeVerified) {
-      return;
-    }
-
-    try {
-      console.log('注册请求的数据:', { username: this.mobileNumber, newPassword: this.newPassword, code: this.code });
-
-      const response = await httpRequest('POST', '/register', {
-        username: this.mobileNumber,
-        password: this.newPassword,
-        code: this.code
-      });
-
-      console.log('注册响应:', response);
-
-      if (response.message === '注册成功') {
-        AlertDialog.show({
-          title: '注册成功',
-          message: '可以使用注册的账号进行登录',
-          autoCancel: true
-        });
-      } else {
-        AlertDialog.show({
-          title: '注册失败',
           message: response.message,
           autoCancel: true
         });

@@ -11,11 +11,9 @@ const app = express();
 const port = 3000;
 
 // 连接到 MongoDB 数据库
-
 mongoose.connect('mongodb://localhost:27017/starwisper')
     .then(() => console.log('MongoDB 连接成功'))
     .catch((err) => console.error('MongoDB 连接失败', err))
-
 
 // 用户模型
 const UserSchema = new mongoose.Schema({
@@ -55,6 +53,7 @@ app.post('/send-verification-code', async (req, res) => {
     try {
         // 查找是否已有该邮箱的验证码
         let existingCode = await VerificationCode.findOne({ email });
+        // console.log('验证码记录:', verificationRecord);  // 打印验证码记录
         if (existingCode) {
             // 如果验证码已存在，更新它
             existingCode.code = verificationCode;
@@ -109,6 +108,52 @@ app.post('/verify-code', async (req, res) => {
     }
 });
 
+// 忘记密码接口
+app.post('/reset-password', async (req, res) => {
+    const { email, code, newPassword, confirmPassword } = req.body;
+
+    if (!email || !code || !newPassword || !confirmPassword) {
+        return res.status(400).json({ message: '所有字段都是必填项' });
+    }
+
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ message: '两次输入的密码不一致' });
+    }
+
+    try {
+        const verificationRecord = await VerificationCode.findOne({ email });
+        if (!verificationRecord) {
+            return res.status(400).json({ message: '验证码不存在' });
+        }
+
+        if (Date.now() > verificationRecord.expires) {
+            return res.status(400).json({ message: '验证码已过期' });
+        }
+
+        if (verificationRecord.code !== code) {
+            return res.status(400).json({ message: '验证码错误' });
+        }
+
+        const user = await User.findOne({ username: email });
+        if (!user) {
+            return res.status(404).json({ message: '用户不存在' });
+        }
+
+        // 直接保存明文密码
+        user.password = newPassword;
+        await user.save();
+
+        await VerificationCode.deleteOne({ email });
+        return res.json({ message: '密码修改成功' });
+    } catch (error) {
+        console.error('修改密码时出错:', error);
+        return res.status(500).json({ message: '修改密码时出错' });
+    }
+});
+
+
+
+
 // 注册接口
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
@@ -120,9 +165,8 @@ app.post('/register', async (req, res) => {
             return res.json({ message: '用户名已存在' });
         }
 
-        // 密码加密
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword });
+        // 直接保存明文密码
+        const newUser = new User({ username, password });
 
         await newUser.save();
         return res.json({ message: '注册成功' });
@@ -131,6 +175,7 @@ app.post('/register', async (req, res) => {
         return res.status(500).json({ message: '注册失败' });
     }
 });
+
 
 // 登录接口
 app.post('/login', async (req, res) => {
@@ -142,9 +187,8 @@ app.post('/login', async (req, res) => {
             return res.json({ message: '用户不存在' });
         }
 
-        // 检查密码是否正确
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
+        // 直接比较密码
+        if (user.password !== password) {
             return res.json({ message: '密码错误' });
         }
 
@@ -155,6 +199,7 @@ app.post('/login', async (req, res) => {
         return res.status(500).json({ message: '登录失败' });
     }
 });
+
 
 app.listen(port, () => {
     console.log(`服务器已启动，监听端口 ${port}`);

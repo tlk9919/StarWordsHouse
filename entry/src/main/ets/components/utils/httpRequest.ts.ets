@@ -24,12 +24,11 @@ interface VerifyCodeRequestData {
   code: string;  // 修改为 code
 }
 
-// 新增：修改密码请求数据类型
 interface ChangePasswordRequestData {
   email: string;
-  password: string;      // 当前密码
-  newPassword: string;   // 新密码
-  code: string;          // 验证码
+  newPassword: string;     // 新密码
+  confirmPassword: string; // 确认密码
+  code: string;            // 验证码
 }
 
 // --------------------------------------

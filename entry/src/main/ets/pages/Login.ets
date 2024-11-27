@@ -25,12 +25,13 @@ function card() {
 @Component
 struct  tab {
   @State tellnumber:string='188****8888'
-  @State mobileNumber:string=''//手机号
-  @State password:string=''//密码
+  @State mobileNumber:string='991988677@qq.com'//手机号
+  @State password:string='991988677abcde'//密码
 
 
   // 登录按钮点击事件
   async handleLogin() {
+    console.log('发送的密码:', this.password);
     try {
       const response = await httpRequest('POST', '/login', {
         username: this.mobileNumber,
