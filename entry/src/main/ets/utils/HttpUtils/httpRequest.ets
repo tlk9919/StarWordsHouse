@@ -1,62 +1,7 @@
 import axios, { AxiosResponse } from '@ohos/axios';
+import {ChangePasswordRequestData,ChangePasswordResponseData,LoginRequestData,LoginResponseData,RegisterRequestData, SendVerificationCodeRequestData,SendVerificationCodeResponseData,VerifyCodeRequestData,VerifyCodeResponseData} from '../../model/ApiData';
 
-// --------------------------------------
-// 定义不同请求类型的数据
-// --------------------------------------
-
-interface RegisterRequestData {
-  username: string;
-  password: string;
-  code?: string;  // 修改为 code
-}
-
-interface LoginRequestData {
-  username: string;
-  password: string;
-}
-
-interface SendVerificationCodeRequestData {
-  email: string;
-}
-
-interface VerifyCodeRequestData {
-  email: string;
-  code: string;  // 修改为 code
-}
-
-interface ChangePasswordRequestData {
-  email: string;
-  newPassword: string;     // 新密码
-  confirmPassword: string; // 确认密码
-  code: string;            // 验证码
-}
-
-// --------------------------------------
-// 定义响应数据的类型
-// --------------------------------------
-
-interface LoginResponseData {
-  message: string;
-  token?: string;
-}
-
-interface SendVerificationCodeResponseData {
-  message: string;
-}
-
-interface VerifyCodeResponseData {
-  message: string;
-}
-
-// 新增：修改密码响应数据类型
-interface ChangePasswordResponseData {
-  message: string;  // 成功或失败的信息
-}
-
-// --------------------------------------
 // 封装 HTTP 请求工具
-// --------------------------------------
-
 export async function httpRequest(
   method: string,
   url: string,

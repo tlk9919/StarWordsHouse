@@ -1,6 +1,7 @@
-import {uiTermsStyle,Header,buttonStyle,forgetPassword,welcome} from "../../components/components"
-import { httpRequest } from '../../utils/HttpUtils/httpRequest'; // 引入 HTTP 请求工具
+import {uiTermsStyle,buttonStyle,forgetPassword} from "../../components/components"
+import { httpRequest } from '../../utils/HttpUtils/httpRequest';  // 引入 HTTP 请求工具
 import { router } from '@kit.ArkUI'
+import loginService from "../../Service/LoginService";
 
 @Styles
 //背部统一卡片样式
@@ -18,53 +19,10 @@ function card() {
 }
 //导航栏及其内容
 @Component
-struct  tab {
+ export struct  LoginTab {
   @State tellnumber:string='188****8888'
-  @State mobileNumber:string=''//手机号
-  @State password:string=''//密码
-
-
-  // 登录按钮点击事件
-  async handleLogin() {
-    try {
-      const response = await httpRequest('POST', '/login', {
-        username: this.mobileNumber,
-        password: this.password
-      });
-
-      if (response.message === '登录成功') {
-
-        setTimeout(()=>{
-          router.replaceUrl(
-            {
-              url:'pages/Home/Index'
-            },
-            //跳转模式
-            router.RouterMode.Single,
-            //失败的回调
-            err=>{
-              if (err) {
-                console.log(`路由失败 errCode:${err.code} ,errMsg:${err.message}`)
-              }
-            }
-          )
-        },1000)
-
-      } else {
-        AlertDialog.show({
-          title: '登录失败',
-          message: response.message,
-          autoCancel: true
-        });
-      }
-    } catch (e) {
-      AlertDialog.show({
-        title: '请求失败',
-        message: '服务器错误，请稍后再试',
-        autoCancel: true
-      });
-    }
-  }
+  @State mobileNumber:string='991988677@qq.com'//手机号
+  @State password:string='991988677abcde'//密码
   build() {
     Column() {
       //导航
@@ -103,12 +61,14 @@ struct  tab {
                   .width(320)
                   .height(60)
                   .onClick(() => {
-                    console.log('testTag','手机号:', this.mobileNumber,'密码',this.password);
-                    this.handleLogin() // 调用登录处理函数
+                    console.log('testTag','手机号:', this.mobileNumber,'密码',this.password)
+                    //调用服务处登录函数
+                    loginService.handleLogin(this.mobileNumber,this.password)
                   });
               }
               .margin(20)
             }
+
             // 服务条款与隐私政策
             uiTermsStyle()
           }
@@ -129,26 +89,10 @@ struct  tab {
             .margin({ top: 40 })
             uiTermsStyle()
           }
+
         }.tabBar('免密登录')
       }
     }
     .card()
-  }
-}
-@Entry
-@Component
-struct Register {
-  build() {
-    Column({ space: 10 }) {
-      // 返回键位
-      Header()
-      // 注册标题
-      welcome("欢迎注册","未注册的手机号将自动创建账号")
-      //导航栏
-      tab()
-    }
-    .width('100%')
-    .height('100%')
-    .backgroundColor("#ecc4f4")
   }
 }
