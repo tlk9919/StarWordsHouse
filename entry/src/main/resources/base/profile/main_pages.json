@@ -7,6 +7,8 @@
     "pages/Welcome/WelcomePage",
     "pages/Register/Register",
     "pages/Login/Login",
-    "pages/Test/test"
+    "pages/Test/test",
+    "pages/calendar/calendar",
+    "pages/Homepage/PersonHome"
   ]
 }

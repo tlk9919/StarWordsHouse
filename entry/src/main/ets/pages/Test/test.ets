@@ -1,0 +1,40 @@
+// Row(){
+//   Image($r('app.media.homeset')).width('200px')
+//   Text('使用设置')
+// }.margin({left:10})
+// Row(){ Image($r('app.media.PersonHomeBack')).width('60px')}.margin({right:30})
+// .width('100%').justifyContent(FlexAlign.SpaceBetween)
+// //客服与投诉
+// Row(){
+//   Row(){
+//     Image($r('app.media.Homenotify')).width('200px')
+//     Text('例假通知')
+//   }.margin({left:10})
+//   Row(){ Image($r('app.media.PersonHomeBack')).width('60px')}.margin({right:30})
+// }.width('100%').justifyContent(FlexAlign.SpaceBetween)
+// //客服与投诉
+// Row(){
+//   Row(){
+//     Image($r('app.media.Homecomplaint')).width('140px')
+//     Text('客服与投诉').margin({left:10})
+//   }.margin({left:20})
+//   Row(){ Image($r('app.media.PersonHomeBack')).width('60px')}.margin({right:30})
+// }.width('100%').justifyContent(FlexAlign.SpaceBetween)
+// //使用设置
+// Row(){
+//   Image($r('app.media.homeset')).width('200px')
+//   Text('使用设置').margin({right:150})
+//   Image($r('app.media.PersonHomeBack')).width('60px').margin({right:20})
+// }.width('100%').justifyContent(FlexAlign.SpaceAround)
+// //
+// Row(){
+//   Image($r('app.media.Homenotify')).width('200px')
+//   Text('例假通知').margin({right:150})
+//   Image($r('app.media.PersonHomeBack')).width('60px').margin({right:20})
+// }.width('100%').justifyContent(FlexAlign.SpaceAround)
+// //
+// Row(){
+//   Image($r('app.media.Homecomplaint')).width('180px')
+//   Text('客服与投诉').margin({left:10})
+//   Image($r('app.media.PersonHomeBack')).width('60px').margin({right:20})
+// }.width('100%').justifyContent(FlexAlign.SpaceAround)
