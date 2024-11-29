@@ -11,7 +11,7 @@ const PRE_KEY02='registerKey'
 @Component
 struct WelcomePage {
 
-  //获取实例信息
+  //获取实例信息,用于退出
   context=getContext(this) as common.UIAbilityContext
   //声明弹窗
   controller: CustomDialogController = new CustomDialogController({

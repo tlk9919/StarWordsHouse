@@ -1,3 +1,5 @@
+import { DetailDialog } from '../../view/Home/DetailDailog'
+
 @Entry
 @Component
 struct PersonHome {
@@ -5,6 +7,9 @@ struct PersonHome {
   @State ID :string='10000'
   @State MenstrualCycle : number=27
   @State MenstrualLength :number=7
+  controller:CustomDialogController=new CustomDialogController({
+    builder:DetailDialog()
+  })
   @Builder
   buildRow(leftImage: string, leftText: string, rightImage: string) {
      Row() {
@@ -40,7 +45,7 @@ struct PersonHome {
             Text(this.ID).fontColor('#636e72').fontSize('55px')
           }
         }
-        Image($r('app.media.PersonHomeBack')).width(25)
+        Image($r('app.media.PersonHomeBack')).width(25).onClick(()=>this.controller.open())
       }
       .width('100%')
       .justifyContent(FlexAlign.SpaceEvenly)
