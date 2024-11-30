@@ -11,6 +11,7 @@
     "pages/calendar/calendar",
     "pages/Homepage/PersonHome",
     "pages/Homepage/DetailInfo",
-    "pages/Homepage/MenstruationReminder"
+    "pages/Homepage/MenstruationReminder",
+    "pages/Record/Main"
   ]
 }

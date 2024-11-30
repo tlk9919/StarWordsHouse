@@ -100,7 +100,6 @@ private currentPage:Array<PageUrl>=[
     Column({ space: 4 }) {
       Image(this.currentIndex === index ? image : imageActive)
         // .fillColor(this.currentIndex === index ? '#ecc4f4' : '#e0dcdc')//好像不支持
-
         .width(42)
       Text(title)
         .fontColor(this.currentIndex === index ? '#0491d1' : '#8a8a8a')

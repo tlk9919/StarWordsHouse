@@ -25,7 +25,6 @@ struct PersonHome {
     .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
   }
-
   build() {
     Column() {
       // 顶部个人中心
@@ -62,7 +61,6 @@ struct PersonHome {
           .width('100%')
         }
         .margin({left: 10})
-
         // 经期数据展示
         Row() {
           Text('例假周期：' + this.MenstrualCycle + '天').backgroundColor('#fcdcec').padding(10).borderRadius(10)
@@ -70,7 +68,6 @@ struct PersonHome {
         }
         .justifyContent(FlexAlign.SpaceAround)
         .width('100%')
-
         // 使用设置、例假通知、客服与投诉
         Column() {
           this.buildRow('app.media.homeset', '使用设置', 'app.media.homeback2')
