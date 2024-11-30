@@ -5,7 +5,6 @@ export struct DetailDialog {
   @State Age: number = 20
   @State selectedGender: string = '' // 存储选中的性别
   controller: CustomDialogController
-
   // 提取通用的 Row 布局
   @Builder
   buildRow(label: string, value: string | number, isRadio: boolean = false, marginBottom: number = 0) {
@@ -28,7 +27,6 @@ export struct DetailDialog {
               }
             })
           Text('男')
-
           Radio({ value: '女', group: 'radioGroup' })
             .checked(this.selectedGender === '女')
             .radioStyle({
@@ -59,7 +57,6 @@ export struct DetailDialog {
     .padding(15)
     .margin({ bottom: marginBottom }) // 设置底部间距
   }
-
   build() {
     Column({ space: 20 }) {
       // 个人信息标题
@@ -76,12 +73,9 @@ export struct DetailDialog {
       .backgroundColor(Color.White)
       .borderRadius(15)
       .padding(10)
-
-
       this.buildRow('昵称', this.Nickname)
       this.buildRow('年龄', this.Age)
       this.buildRow('性别', '', true, 20) // 设置性别容器底部间距为 20
-
     }
     .width('100%')
     .backgroundColor('#fcdcec')

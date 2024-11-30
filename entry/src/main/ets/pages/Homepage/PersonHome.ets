@@ -3,6 +3,7 @@ import { DetailDialog } from '../../view/Home/DetailDailog'
 @Entry
 @Component
 struct PersonHome {
+  @Provide avatar:ResourceStr='app.media.avatar'//头像路径
   @State Nickname :string='可乐麦旋风'
   @State ID :string='10000'
   @State MenstrualCycle : number=27
@@ -36,7 +37,7 @@ struct PersonHome {
       // 头像昵称等显示区域
       Row({space: 10}) {
         // 头像
-        Image($r('app.media.avatar')).width('25%')
+        Image($r(this.avatar as string)).width('25%')
         Column({space: 20}) {
           // 昵称
           Text(this.Nickname).fontWeight(FontWeight.Bold).fontSize('60px')

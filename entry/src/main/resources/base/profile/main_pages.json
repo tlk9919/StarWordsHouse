@@ -10,6 +10,7 @@
     "pages/Test/test",
     "pages/calendar/calendar",
     "pages/Homepage/PersonHome",
-    "pages/Homepage/DetailInfo"
+    "pages/Homepage/DetailInfo",
+    "pages/Homepage/MenstruationReminder"
   ]
 }
