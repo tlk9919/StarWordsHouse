@@ -1,8 +1,11 @@
 import { bloodVolume } from './bloodVolume'
 import { moodDiary } from './moodDiary';
+import { moodDiary2 } from './moodDiary2';
+
 @Entry
 @Component
 struct main {
+  @State selectedGender: string = '' // 存储选中的性别
   @State currentIndex: number = 0
   @Provide NowTime: Date = new Date(); // 当前日期
   build() {
@@ -16,6 +19,7 @@ struct main {
             moodDiary()
           }.tabBar(this.TabTitle('心情日记',$r('app.media.tab_record01'),1))
           TabContent(){
+            moodDiary2()
           }.tabBar(this.TabTitle('身体状况',$r('app.media.tab_record01'),2))
         }
         .onChange((index)=>{

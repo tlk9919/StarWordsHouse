@@ -30,10 +30,7 @@ export  struct  uiTermsStyle {
     }.margin({top:5})
     .justifyContent(FlexAlign.SpaceAround)
   }
-
-
 }
-
 //返回图标
 @Builder export  function  Header() {
   Row() {
@@ -44,10 +41,8 @@ export  struct  uiTermsStyle {
       })
   }.width('100%')
 }
-
 //按钮
 @Builder
-
 export function buttonStyle(buttonName: string, mobileNumber: string = '', password: string = '') {
   Button(buttonName)
     .borderRadius(10)
@@ -61,8 +56,6 @@ export function buttonStyle(buttonName: string, mobileNumber: string = '', passw
 
     });
 }
-
-
 //手机号登录和忘记密码
 @Component
 export  struct forgetPassword  {
@@ -108,8 +101,6 @@ export function welcome(welcome1:string,tip:string){
       .margin({ left: 10, right: 10 })
   }.width('100%')
 }
-
-
 @Component
 export  struct  freePassLogin {
   @State tellnumber:string='188****8888'

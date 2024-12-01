@@ -41,7 +41,9 @@ private currentPage:Array<PageUrl>=[
   new PageUrl('登录注册界面', 'pages/RegisterLogin/RegisterLogin'),
   new PageUrl('忘记密码界面', 'pages/RecoverPassword/RecoverPassword'),
   new PageUrl('欢迎界面', 'pages/Welcome/WelcomePage'),
-  new PageUrl('找回密码测试界面', 'pages/Test/test'),
+  new PageUrl('个人主页', 'pages/Homepage/PersonHome'),
+  new PageUrl('经期到访时间', 'pages/Homepage/MenstruationReminder'),
+  new PageUrl('记录', 'pages/Record/Main'),
 
 ]
 
