@@ -5,7 +5,7 @@ import { welcome } from '../../components/components';
 @Entry
 @Component
 struct ForgetPassword {
-  @State mobileNumber: string = '991988677@qq.com';  // 手机号（或邮箱）
+    @State mobileNumber: string = '991988677@qq.com';  // 手机号（或邮箱）
   @State newPassword: string = '991988677ab';   // 新密码
   @State confirmPassword: string = '991988677ab'; // 确认新密码
   @State code: string = '';          // 用户输入的验证码

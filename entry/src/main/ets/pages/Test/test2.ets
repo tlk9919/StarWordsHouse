@@ -1,30 +1,13 @@
 import { ChatMessage } from "../../model/getAnswer";
-import getAnswerService from "../../Service/getAnswerService"; // 确保引入的是 GetAnswerService 类
+import  getAnswerService  from "../../Service/getAnswerService"; // 确保引入的是 GetAnswerService 类
 
 @Component
-export struct submitIssue {
+export struct test {
   @State issueText: string = '';
   @State chatHistory: ChatMessage[] = [];
 
   build() {
     Column() {
-      ForEach(this.chatHistory, (message: ChatMessage) => {
-        if (message.sender === 'user') {
-          Row() {
-            Text(message.text)
-              .fontSize(16)
-              .fontColor('#4c94ec');  // 用户提问
-          }
-        } else if (message.sender === 'ai') {
-          Row() {
-            Text(message.text)
-              .fontSize(16)
-              .fontColor('#2e8b57');  // AI 回答
-          }
-        }
-      });
-
-      // 输入框和提交按钮放在聊天记录之后
       Row() {
         // 输入框
         TextInput({ placeholder: '向我提问吧' })
@@ -73,6 +56,23 @@ export struct submitIssue {
           }
         });
       }
+
+      // 显示聊天记录
+      ForEach(this.chatHistory, (message: ChatMessage) => {
+        if (message.sender === 'user') {
+          Row() {
+            Text(message.text)
+              .fontSize(16)
+              .fontColor('#4c94ec');  // 用户提问
+          }
+        } else if (message.sender === 'ai') {
+          Row() {
+            Text(message.text)
+              .fontSize(16)
+              .fontColor('#2e8b57');  // AI 回答
+          }
+        }
+      });
     }
   }
 }

@@ -19,14 +19,17 @@ class Register{
     }
 
     try {
-      // 打印注册时的数据（真实的用户名、密码和验证码）
-      console.log( 'testTag', '注册请求的数据:',  JSON.stringify({ mobileNumberOrEmail:String ,password: String,code: String}));
 
       const response = await httpRequest('POST', '/register', {
         username: mobileNumberOrEmail,
         password:password,
         code: code
       });
+      // 打印响应的结构
+      console.log('注册响应结构:', JSON.stringify(response))
+      console.log('响应的 message:', JSON.stringify(response.message));
+      // 打印注册时的数据（真实的用户名、密码和验证码）
+      console.log( 'testTag', '注册请求的数据:',  JSON.stringify({ mobileNumberOrEmail:String ,password: String,code: String}));
 
       // 打印注册响应
       console.log('注册响应:',JSON.stringify(response));  // 打印服务器返回的响应
@@ -45,11 +48,12 @@ class Register{
         });
       }
     } catch (e) {
-      AlertDialog.show({
-        title: '请求失败',
-        message: '服务器错误，请稍后再试',
-        autoCancel: true
-      });
+        AlertDialog.show({
+          title: '注册失败',
+          // message: '服务器错误，请稍后再试',
+          message: e.message || '服务器错误，请稍后再试。',//手动处理，因为不执行else{}
+          autoCancel: true
+        });
     }
   }
 }

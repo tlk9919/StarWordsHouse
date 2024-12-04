@@ -9,7 +9,7 @@ class LoginService {
         username: mobileNumber,
         password: password
       });
-
+      console.log("返回的响应：", response);  // 打印服务器返回的数据
       if (response.message === '登录成功') {
 
         setTimeout(() => {
@@ -38,7 +38,7 @@ class LoginService {
     } catch (e) {
       AlertDialog.show({
         title: '请求失败',
-        message: '服务器错误，请稍后再试',
+        message: e.message || '服务器错误，请稍后再试',
         autoCancel: true
       });
     }
