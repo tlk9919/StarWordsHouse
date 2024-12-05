@@ -26,7 +26,6 @@ function card() {
     offsetY:5
   })
 }
-@Entry
 @Component
 export  struct RegisterContent {
   @State tellnumber:string='188****8888'
@@ -35,6 +34,12 @@ export  struct RegisterContent {
   @State password: string = '123456789a';      // 密码
   @State code: string = ''; // 用户输入的验证码
   @State isCodeSent: boolean = false;  // 是否已发送验证码
+  async onRegisterComplete() {
+    // 保存注册状态
+    await PreferencesUtils.putPreferenceValue(PREF_NAME02, PRE_KEY02, true);
+    // 跳转到主页面
+    router.replaceUrl({ url: 'pages/Home/Index' }, router.RouterMode.Single);
+  }
   build() {
     Column(){
       Tabs(){
@@ -127,7 +132,7 @@ export  struct RegisterContent {
               .onClick(() =>{
                 //注册处理函数
                 registerService.handleRegister(this.mobileNumberOrEmail,this.password,this.code);
-                // this.onRegisterComplete()
+                this.onRegisterComplete()
               }
               )
             // 服务条款与隐私政策

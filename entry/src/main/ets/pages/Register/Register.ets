@@ -21,7 +21,7 @@ struct Register {
     Column({ space: 10 }){
       Header();
       welcome("欢迎注册", "未注册的账号将自动创建账号");
-      //登录详细框
+      //注册详细框
       RegisterContent()
     }
     .backgroundColor("#ecc4f4")
