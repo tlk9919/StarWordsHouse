@@ -6,7 +6,8 @@ interface AIResponse {
 }
 
 // 基础 API URL
-const BASE_URL = 'http://localhost:3000';
+// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://43.140.214.215:3000';
 
 // 封装的 axios 请求，支持 method 和其他参数
 export async function httpAnswerIssue<T>(
